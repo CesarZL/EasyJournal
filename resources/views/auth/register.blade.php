@@ -46,11 +46,11 @@
                     </div>
                     <div>
                         <label for="password-confirm" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirma tu contraseña</label>
-                        <input type="password" name="password-confirm" id="password-confirm" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
+                        <input type="password" name="password_confirmation" id="password-confirm" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-purple-600 focus:border-purple-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                     </div>
                     <div class="flex items-start">
                         <div class="flex items-center h-5">
-                          <input id="terms" aria-describedby="terms" type="checkbox" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-purple-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-600 dark:ring-offset-gray-800">
+                          <input id="terms" aria-describedby="terms" type="checkbox" class="text-purple-600 w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-purple-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-600 dark:ring-offset-gray-800">
                         </div>
                         <div class="ml-3 text-sm">
                           <label for="terms" class="font-light text-gray-500 dark:text-gray-300">He leído y Acepto los <a class="font-medium text-purple-600 hover:underline dark:text-purple-500" href="#">términos y condiciones</a></label>
