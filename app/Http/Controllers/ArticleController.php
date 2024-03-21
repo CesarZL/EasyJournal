@@ -43,14 +43,23 @@ class ArticleController extends Controller
         // regresa la vista de edición del artículo con el id del artículo
         return view('edit-article', compact('article'));
     }
+
     
     public function update(Request $request, Article $article)
     {
         $request->validate([
             'content' => 'required',
         ]);
-
+     
+         // Verificar si el campo 'content' está vacío
+        if ($article->content == '') {
         
+            // Solo actualizar el campo 'content' del artículo
+            $article->content = $request->content;
+            $article->save();
+            
+            return response()->json(['message' => 'El artículo se ha actualizado correctamente']);
+        }
 
         // Reemplazar &nbsp; con espacios
         $article->content = str_replace('&nbsp;', ' ', $article->content);
@@ -124,28 +133,24 @@ class ArticleController extends Controller
         $texContent .= $content_to_tex($contentData->blocks);
         $texContent .= "\\end{document}";
 
+        // Guardar contenido como archivo .tex
+        $texFilePath = public_path("articles_storage/{$article->id}.tex");
+        file_put_contents($texFilePath, $texContent);
 
-        // $texContent .= "\\begin{document}\n";
-        // $texContent .= $content_to_tex($contentData->blocks);
-        // $texContent .= "\\end{document}";
+        // Convertir .tex a .pdf
+        $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=articles_storage", $texFilePath]);
+        $process->run();
 
-    // Guardar contenido como archivo .tex
-    $texFilePath = public_path("articles/{$article->id}.tex");
-    file_put_contents($texFilePath, $texContent);
+        // Obtener la URL del PDF generado
+        $pdfUrl = asset("articles_storage/{$article->id}.pdf");
 
-    // Convertir .tex a .pdf
-    $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=articles", $texFilePath]);
-    $process->run();
+        // Actualizar el contenido del artículo si es necesario
+        $article->content = $request->content;
+        $article->save();
 
-    // Obtener la URL del PDF generado
-    $pdfUrl = asset("articles/{$article->id}.pdf");
+        return response()->json(['message' => 'El artículo se ha actualizado correctamente', 'pdf_url' => $pdfUrl]);
 
-    // Actualizar el contenido del artículo si es necesario
-    $article->content = $request->content;
-    $article->save();
-
-    return response()->json(['message' => 'El artículo se ha actualizado correctamente', 'pdf_url' => $pdfUrl]);
-}
+    }
 
     public function destroy($id)
     {
