@@ -1,5 +1,5 @@
 <x-app-layout>
     
-    <x-dashboard-table :articles="$articles" />
+    <x-edit-article :article="$article" />
     
 </x-app-layout>
