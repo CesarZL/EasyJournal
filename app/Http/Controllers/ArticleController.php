@@ -56,16 +56,13 @@ class ArticleController extends Controller
             'content' => 'required',
         ]);
 
-           
         $article->content = $request->content;
         $article->save();
 
-     
         $articleId = $article->id;
 
         // Leer el artículo más reciente por ID
         $latestArticle = Article::find($articleId);
-
 
         // Reemplazar &nbsp; con espacios
         $latestArticle->content = str_replace('&nbsp;', ' ', $latestArticle->content);
@@ -136,13 +133,18 @@ class ArticleController extends Controller
         $texContent .= $content_to_tex($contentData->blocks);
         $texContent .= "\\end{document}";
 
+        // Crear la carpeta articles_storage si no existe
+        $articlesStoragePath = public_path('articles_storage');
+        if (!file_exists($articlesStoragePath)) {
+            mkdir($articlesStoragePath, 0777, true);
+        }
+
         // Guardar contenido como archivo .tex
         $texFilePath = public_path("articles_storage/{$latestArticle->id}.tex");
-
         file_put_contents($texFilePath, $texContent);
 
         // $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=articles_storage", $texFilePath]);
-        $process = new Process(['/usr/bin/pdflatex', "-output-directory=articles_storage", $texFilePath]);
+        $process = new Process(['/usr/bin/pdflatex', '-output-directory=articles_storage', $texFilePath]);
 
         $process->run();
 
@@ -155,8 +157,6 @@ class ArticleController extends Controller
             unlink($texFilePath);
             return response()->json(['message' => 'Error al compilar el archivo .tex a PDF']);
         }
-
-
     }
 
     
