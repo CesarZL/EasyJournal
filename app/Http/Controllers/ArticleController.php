@@ -142,7 +142,7 @@ class ArticleController extends Controller
         file_put_contents($texFilePath, $texContent);
 
         // $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=articles_storage", $texFilePath]);
-        $process = new Process(['pdflatex', "-output-directory=articles", $texFilePath]);
+        $process = new Process(['/usr/bin/pdflatex', "-output-directory=articles_storage", $texFilePath]);
 
         $process->run();
 
