@@ -14,6 +14,9 @@
             <div class="p-5" id="editorjs">
                 {{-- AQUI SE DEBE VOLVER A MOSTRAR EL FORMATO DE EDITORJS --}}
             </div>
+            
+            <input type="text" value="{{ $article->content }}" name="content_value" id="content_value" hidden>
+        
 
         </div>
     </div>
@@ -21,12 +24,12 @@
     <!-- Columna derecha -->
     <div class="flex-1">
         <div class="rounded-lg h-screen bg-red-50 dark:bg-gray-800">
-            @if(file_exists(public_path('articles_storage/' . $article->id . '.pdf')))
-                <embed id="pdf-embed" src="{{ asset('articles_storage/' . $article->id . '.pdf') }}" type="application/pdf" width="100%" height="100%" />
-            @endif
+             <embed id="pdf-embed" src="" type="application/pdf" width="100%" height="100%" />
         </div>
     </div>
 
 
 </div>
+
+
 

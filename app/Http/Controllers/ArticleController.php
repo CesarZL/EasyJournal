@@ -40,9 +40,14 @@ class ArticleController extends Controller
 
     public function edit(Article $article)
     {
-        // regresa la vista de edición del artículo con el id del artículo
-        return view('edit-article', compact('article'));
+        // Pasa el contenido del campo 'content' a la vista
+        $content = $article->content;
+        
+        return view('edit-article', compact('article', 'content'));
+        
     }
+    
+    
 
     
     public function update(Request $request, Article $article)
@@ -50,22 +55,23 @@ class ArticleController extends Controller
         $request->validate([
             'content' => 'required',
         ]);
+
+           
+        $article->content = $request->content;
+        $article->save();
+
      
-         // Verificar si el campo 'content' está vacío
-        if ($article->content == '') {
-        
-            // Solo actualizar el campo 'content' del artículo
-            $article->content = $request->content;
-            $article->save();
-            
-            return response()->json(['message' => 'El artículo se ha actualizado correctamente']);
-        }
+        $articleId = $article->id;
+
+        // Leer el artículo más reciente por ID
+        $latestArticle = Article::find($articleId);
+
 
         // Reemplazar &nbsp; con espacios
-        $article->content = str_replace('&nbsp;', ' ', $article->content);
+        $latestArticle->content = str_replace('&nbsp;', ' ', $latestArticle->content);
 
         // Parsear el contenido JSON
-        $contentData = json_decode($article->content);
+        $contentData = json_decode($latestArticle->content);
 
         // Función para convertir el contenido a formato tex
         $content_to_tex = function ($blocks, $depth = 1) use (&$content_to_tex) {
@@ -85,7 +91,6 @@ class ArticleController extends Controller
                                 $tex .= '\subsubsection{' . $headerText . '}' . PHP_EOL;
                                 break;
                             default:
-                                // Otras profundidades no soportadas, puede agregar lógica adicional según sea necesario
                                 break;
                         }
                         break;
@@ -93,7 +98,6 @@ class ArticleController extends Controller
                         $tex .= str_replace('_', '\_', $block->data->text) . PHP_EOL;
                         break;
                     default:
-                        // No hacer nada o manejar otros tipos de bloques según sea necesario
                         break;
                 }
                 if (isset($block->data->children)) {
@@ -102,7 +106,6 @@ class ArticleController extends Controller
             }
             return $tex;
         };
-
 
         // Convertir contenido a formato tex
         $texContent = "\\documentclass{article}\n";
@@ -121,7 +124,7 @@ class ArticleController extends Controller
         $texContent .= "  \\small  \n";
         $texContent .= "  \\textbf{\\textit{Keywords---}} #1\n";
         $texContent .= "} \n";
-        $texContent .= "\\title{" . $article->title . "}\n";
+        $texContent .= "\\title{" . $latestArticle->title . "}\n";
         $texContent .= "\\author[1,*]{" . auth()->user()->name . " \\orcidlink{0000-1111-1111-2222}}\n";
         $texContent .= "\\affil[1]{Universidad Politécnica de victoria}\n";
         $texContent .= "\\begin{document}\n";
@@ -134,23 +137,29 @@ class ArticleController extends Controller
         $texContent .= "\\end{document}";
 
         // Guardar contenido como archivo .tex
-        $texFilePath = public_path("articles_storage/{$article->id}.tex");
+        $texFilePath = public_path("articles_storage/{$latestArticle->id}.tex");
+
         file_put_contents($texFilePath, $texContent);
 
-        // Convertir .tex a .pdf
-        $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=articles_storage", $texFilePath]);
+        // $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=articles_storage", $texFilePath]);
+        $process = new Process(['pdflatex', "-output-directory=articles", $texFilePath]);
+
         $process->run();
 
-        // Obtener la URL del PDF generado
-        $pdfUrl = asset("articles_storage/{$article->id}.pdf");
+        if ($process->isSuccessful()) {
+            // Obtener la URL del PDF generado
+            $pdfUrl = asset("articles_storage/{$article->id}.pdf");
+            return response()->json(['message' => 'El artículo se ha actualizado correctamente', 'pdf_url' => $pdfUrl]);
+        } else {
+            // Eliminar el archivo .tex si la compilación falla
+            unlink($texFilePath);
+            return response()->json(['message' => 'Error al compilar el archivo .tex a PDF']);
+        }
 
-        // Actualizar el contenido del artículo si es necesario
-        $article->content = $request->content;
-        $article->save();
-
-        return response()->json(['message' => 'El artículo se ha actualizado correctamente', 'pdf_url' => $pdfUrl]);
 
     }
+
+    
 
     public function destroy($id)
     {
