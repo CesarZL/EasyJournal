@@ -67,5 +67,11 @@ class User extends Authenticatable
         return $this->hasMany(Article::class);
     }
 
+    public function files()
+    {
+        return $this->hasMany(Template::class);
+    }
+
+
 
 }

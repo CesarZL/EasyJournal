@@ -51,6 +51,7 @@
 
                 <x-input-error for="photo" class="mt-2" />
             </div>
+
         @endif
 
         <!-- Name -->

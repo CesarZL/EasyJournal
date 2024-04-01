@@ -45,7 +45,7 @@
                     @foreach ($articles as $article)
                                 
                     {{-- <tr class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 {{ $i == $totalFilas - 1 ? '' : 'border-b' }}"> --}}
-                    <tr class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 border-b">
+                    <tr class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 {{ $loop->last ? '' : 'border-b' }}">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{-- Ruta para editar el articulo --}}
                             {{-- Route::get('/articles/{article}/edit', [App\Http\Controllers\ArticleController::class, 'edit'])->name('articles.edit'); --}}
@@ -69,6 +69,9 @@
                                 @method('DELETE')
                                 <button type="submit" class="font-medium text-red-600 dark:text-red-500">Borrar</button>
                             </form>
+
+                            <a href="{{ route('articles.edit-details', $article) }}" class="ms-2 font-medium text-yellow-600 dark:text-yellow-400">Editar</a>
+                            
                         </td>
                     </tr>
                 @endforeach

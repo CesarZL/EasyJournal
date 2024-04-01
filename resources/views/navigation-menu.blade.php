@@ -14,7 +14,7 @@
 
         @if ($isDashboardRoute)
             <li>
-                <a data-modal-target="static-modal" data-modal-toggle="static-modal" type="button" class="mb-5 flex items-center p-2 text-base font-normal rounded-md dark:text-white hover:bg-primary-700 dark:bg-primary-700  dark:hover:bg-primary-500 group bg-primary-200 text-primary-800 hover:text-primary-100 cursor-pointer">
+                <a data-modal-target="static-modal-new" data-modal-toggle="static-modal-new" type="button" class="mb-5 flex items-center p-2 text-base font-normal rounded-md dark:text-white hover:bg-primary-700 dark:bg-primary-700  dark:hover:bg-primary-500 group bg-primary-200 text-primary-800 hover:text-primary-100 cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary-800 transition duration-75 dark:text-white group-hover:text-primary-100 dark:group-hover:text-white">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
@@ -26,7 +26,7 @@
         @endif
 
         <li>
-            <a href="#" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-md dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+            <a href="{{route('dashboard')}}" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-md dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group @if(request()->routeIs('dashboard')) bg-primary-200 text-primary-800 hover:text-primary-100 dark:bg-primary-700 dark:text-white dark:hover:bg-primary-500 @endif">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="flex-shrink-0 w-5 h-5 text-gray-600 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
                 </svg>
@@ -39,7 +39,7 @@
         </li>
            
         <li>
-            <a href="#" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-md dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+            <a href="{{route('templates')}}" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-md dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group @if(request()->routeIs('templates')) bg-primary-200 text-primary-800 hover:text-primary-100 dark:bg-primary-700 dark:text-white dark:hover:bg-primary-500 @endif">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="flex-shrink-0 w-5 h-5 text-gray-600 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
                 </svg>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Article;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use App\Models\Template;
 
 class ArticleController extends Controller
 {
@@ -42,9 +43,22 @@ class ArticleController extends Controller
     {
         // Pasa el contenido del campo 'content' a la vista
         $content = $article->content;
+
+        //pasa los datos de las templates a la vista
+        $templates = Template::where('user_id', auth()->user()->id)->get();
         
-        return view('edit-article', compact('article', 'content'));
+        return view('edit-article', compact('article', 'content', 'templates'));
         
+    }
+
+    public function editDetails(Article $article)
+    {
+        // Pasa el contenido del campo 'content' a la vista
+        $content = $article->content;
+
+        dd($article);
+        
+        // return view('edit-article-details', compact('article', 'content'));
     }
     
     
@@ -143,8 +157,8 @@ class ArticleController extends Controller
         $texFilePath = public_path("articles_storage/{$latestArticle->id}.tex");
         file_put_contents($texFilePath, $texContent);
 
-        // $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=articles_storage", $texFilePath]);
-        $process = new Process(['/usr/bin/pdflatex', '-output-directory=articles_storage', $texFilePath]);
+        $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=articles_storage", $texFilePath]);
+        // $process = new Process(['/usr/bin/pdflatex', '-output-directory=articles_storage', $texFilePath]);
 
         $process->run();
 
