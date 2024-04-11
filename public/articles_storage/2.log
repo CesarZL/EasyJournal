@@ -1,12 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.3.11)  31 MAR 2024 22:41
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.3.14)  1 APR 2024 08:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**"C:/Users/cesar/Documents/DESARROLLO WEB/EasyJournal - v2/public/articles_sto
-rage/2.tex"
+**C:/Users/cesar/Documents/JOURNAL/EasyJournal_v1/public/articles_storage/2.tex
 
-(C:/Users/cesar/Documents/DESARROLLO WEB/EasyJournal - v2/public/articles_stora
-ge/2.tex
+(C:/Users/cesar/Documents/JOURNAL/EasyJournal_v1/public/articles_storage/2.tex
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-04>
 (C:\Users\cesar\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
@@ -642,7 +640,7 @@ File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count317
 \l__pdf_internal_box=\box67
 )
-No file 2.aux.
+(C:\Users\cesar\Documents\JOURNAL\EasyJournal_v1\public\articles_storage\2.aux)
 \openout1 = `2.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
@@ -698,6 +696,8 @@ LaTeX Font Info:    ... okay on input line 20.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 Package hyperref Info: Link coloring OFF on input line 20.
+(C:\Users\cesar\Documents\JOURNAL\EasyJournal_v1\public\articles_storage\2.out)
+(C:\Users\cesar\Documents\JOURNAL\EasyJournal_v1\public\articles_storage\2.out)
 \@outlinefile=\write4
 \openout4 = `2.out'.
 
@@ -743,30 +743,22 @@ LaTeX Font Info:    External font `cmex10' loaded for size
  [1
 
 {C:/Users/cesar/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
-(C:\Users\cesar\Documents\DESARROLLO WEB\EasyJournal - v2\public\articles_stora
-ge\2.aux)
+(C:\Users\cesar\Documents\JOURNAL\EasyJournal_v1\public\articles_storage\2.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-04>
  ***********
-
-
-Package rerunfilecheck Warning: File `2.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `2.out':
-(rerunfilecheck)             Before: <no file>
-(rerunfilecheck)             After:  D41D8CD98F00B204E9800998ECF8427E;0.
+Package rerunfilecheck Info: File `2.out' has not changed.
+(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 21428 strings out of 474486
- 412664 string characters out of 5743755
+ 21436 strings out of 474486
+ 413075 string characters out of 5743755
  1929542 words of memory out of 5000000
- 43382 multiletter control sequences out of 15000+600000
+ 43384 multiletter control sequences out of 15000+600000
  563724 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 117i,6n,121p,486b,851s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 117i,6n,121p,475b,851s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/cesar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmbx9.pfb><C:/Users/cesar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
 onts/cm/cmbxti10.pfb><C:/Users/cesar/AppData/Local/Programs/MiKTeX/fonts/type1/
@@ -777,8 +769,8 @@ rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/cesar/AppData/Loc
 al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/cesar/AppD
 ata/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Users/ces
 ar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on "C:\Users\cesar\Documents\DESARROLLO WEB\EasyJournal - v2\pub
-lic\articles_storage\2.pdf" (1 page, 94991 bytes).
+Output written on C:\Users\cesar\Documents\JOURNAL\EasyJournal_v1\public\articl
+es_storage\2.pdf (1 page, 94240 bytes).
 PDF statistics:
  60 PDF objects out of 1000 (max. 8388607)
  2 named destinations out of 1000 (max. 500000)

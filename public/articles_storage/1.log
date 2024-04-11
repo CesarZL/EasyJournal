@@ -1,12 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.3.11)  1 APR 2024 04:27
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.3.14)  9 APR 2024 21:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**"C:/Users/cesar/Documents/DESARROLLO WEB/EasyJournal - v2/public/articles_sto
-rage/1.tex"
+**C:/Users/cesar/Documents/JOURNAL/EasyJournal_v1/public/articles_storage/1.tex
 
-(C:/Users/cesar/Documents/DESARROLLO WEB/EasyJournal - v2/public/articles_stora
-ge/1.tex
+(C:/Users/cesar/Documents/JOURNAL/EasyJournal_v1/public/articles_storage/1.tex
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-04>
 (C:\Users\cesar\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
@@ -642,8 +640,7 @@ File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count317
 \l__pdf_internal_box=\box67
 )
-(C:\Users\cesar\Documents\DESARROLLO WEB\EasyJournal - v2\public\articles_stora
-ge\1.aux)
+(C:\Users\cesar\Documents\JOURNAL\EasyJournal_v1\public\articles_storage\1.aux)
 \openout1 = `1.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
@@ -664,7 +661,6 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 20.
 LaTeX Font Info:    ... okay on input line 20.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 20.
 LaTeX Font Info:    ... okay on input line 20.
-
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -700,11 +696,8 @@ LaTeX Font Info:    ... okay on input line 20.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 Package hyperref Info: Link coloring OFF on input line 20.
-
-(C:\Users\cesar\Documents\DESARROLLO WEB\EasyJournal - v2\public\articles_stora
-ge\1.out)
-(C:\Users\cesar\Documents\DESARROLLO WEB\EasyJournal - v2\public\articles_stora
-ge\1.out)
+(C:\Users\cesar\Documents\JOURNAL\EasyJournal_v1\public\articles_storage\1.out)
+(C:\Users\cesar\Documents\JOURNAL\EasyJournal_v1\public\articles_storage\1.out)
 \@outlinefile=\write4
 \openout4 = `1.out'.
 
@@ -747,42 +740,47 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <9> on input line 21.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 21.
- [1
+
+
+Package hyperref Warning: Difference (2) between bookmark levels is greater 
+(hyperref)                than one, level fixed on input line 28.
+
+[1
 
 {C:/Users/cesar/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
-(C:\Users\cesar\Documents\DESARROLLO WEB\EasyJournal - v2\public\articles_stora
-ge\1.aux)
+(C:\Users\cesar\Documents\JOURNAL\EasyJournal_v1\public\articles_storage\1.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-04>
  ***********
 Package rerunfilecheck Info: File `1.out' has not changed.
-(rerunfilecheck)             Checksum: EDE36BEFB119E7DF48315CE14F160326;318.
+(rerunfilecheck)             Checksum: 6A59B3FAA33E9F035519FB1E7DC272B1;237.
  ) 
 Here is how much of TeX's memory you used:
  21449 strings out of 474486
- 413354 string characters out of 5743755
+ 413217 string characters out of 5743755
  1930542 words of memory out of 5000000
  43393 multiletter control sequences out of 15000+600000
- 564636 words of font info for 57 fonts, out of 8000000 for 9000
+ 564637 words of font info for 57 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 117i,6n,121p,486b,851s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 117i,6n,121p,475b,851s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/cesar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
-cmbx12.pfb><C:/Users/cesar/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
-fonts/cm/cmbx9.pfb><C:/Users/cesar/AppData/Local/Programs/MiKTeX/fonts/type1/pu
-blic/amsfonts/cm/cmbxti10.pfb><C:/Users/cesar/AppData/Local/Programs/MiKTeX/fon
-ts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/cesar/AppData/Local/Programs/Mi
-KTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/cesar/AppData/Local/Pro
-grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/cesar/AppData/L
-ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/cesar/Ap
-pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/c
-esar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/
-Users/cesar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti9.
-pfb>
-Output written on "C:\Users\cesar\Documents\DESARROLLO WEB\EasyJournal - v2\pub
-lic\articles_storage\1.pdf" (1 page, 105302 bytes).
+cmbx10.pfb><C:/Users/cesar/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
+fonts/cm/cmbx12.pfb><C:/Users/cesar/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmbx9.pfb><C:/Users/cesar/AppData/Local/Programs/MiKTeX/fonts
+/type1/public/amsfonts/cm/cmbxti10.pfb><C:/Users/cesar/AppData/Local/Programs/M
+iKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/cesar/AppData/Local/Pr
+ograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/cesar/AppData/
+Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/cesar/
+AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users
+/cesar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C
+:/Users/cesar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr9
+.pfb><C:/Users/cesar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
+cm/cmti9.pfb>
+Output written on C:\Users\cesar\Documents\JOURNAL\EasyJournal_v1\public\articl
+es_storage\1.pdf (1 page, 118177 bytes).
 PDF statistics:
- 78 PDF objects out of 1000 (max. 8388607)
- 5 named destinations out of 1000 (max. 500000)
- 37 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 79 PDF objects out of 1000 (max. 8388607)
+ 4 named destinations out of 1000 (max. 500000)
+ 29 words of extra memory for PDF output out of 10000 (max. 10000000)
 

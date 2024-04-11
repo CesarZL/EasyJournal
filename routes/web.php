@@ -45,6 +45,10 @@ Route::middleware([
     Route::post('/templates/preview/{template}', [App\Http\Controllers\ArticleUploadController::class, 'preview'])->name('templates.preview');
     Route::delete('/templates/{template}', [App\Http\Controllers\ArticleUploadController::class, 'destroy'])->name('templates.destroy');
 
+    //Rutas para el controlador de edicion de detalles de articulos
+    Route::get('/articles/{article}/edit/details', [App\Http\Controllers\ArticleDetailsController::class, 'edit'])->name('articles.edit-details');
+    Route::put('/articles/{article}/details', [App\Http\Controllers\ArticleDetailsController::class, 'update'])->name('articles.update-details');
+    
 
 
         

@@ -1,5 +1,6 @@
-<x-app-layout>
+<x-edit-layout>
+    @livewire('edit-menu', ['article' => $article])
+
+    <x-article :article="$article" :content="$content" :templates="$templates" />
     
-    <x-edit-article :article="$article" :content="$content" :templates="$templates" />
-    
-</x-app-layout>
+</x-edit-layout>

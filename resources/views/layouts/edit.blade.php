@@ -29,7 +29,7 @@
                 </svg>
              </button>
 
-            @livewire('navigation-menu')
+            {{-- @livewire('edit-menu') --}}    
 
             <!-- Page Content -->
             <main class="p-4 sm:ml-64">
