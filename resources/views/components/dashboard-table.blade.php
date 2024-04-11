@@ -67,10 +67,10 @@
                             <form action="{{ route('articles.destroy', $article) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="font-medium text-red-600 dark:text-red-500">Borrar</button>
+                                <button type="submit" class="font-medium text-red-600 dark:text-red-500">Borrar artículo</button>
                             </form>
 
-                            <a href="{{ route('articles.edit-details', $article) }}" class="ms-2 font-medium text-yellow-600 dark:text-yellow-400">Editar</a>
+                            <a href="{{ route('articles.edit-details', $article) }}" class="ms-2 font-medium text-yellow-600 dark:text-yellow-400">Editar detalles</a>
                             
                         </td>
                     </tr>

@@ -24,9 +24,6 @@
         </select>
     </div>
 
-
-
-
 </div>
 
 <div class="flex flex-col xl:flex-row ">
@@ -35,6 +32,17 @@
     <div class="flex-1 xl:pe-3 py-3 xl:py-0">
         <div class="p-5 border-2 border-gray-300 border-dashed rounded-lg dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white overflow-y-auto h-screen">
             
+            {{-- abstract --}}
+            <div class="mt-4">
+                <x-label for="abstract" :value="__('Resumen')" />
+                <textarea rows="5" name="abstract" id="abstract" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">{{ old('abstract', $article->abstract) }}</textarea>
+            </div>
+
+            <div class="mt-4">
+                <x-label for="keywords" :value="__('Palabras clave (separadas por comas)')" />
+                <x-input id="keywords" class="block mt-1 w-full" type="text" name="keywords" value="{{ old('keywords', $article->keywords) }}" required />
+            </div>
+
             <div class="p-5" id="editorjs">
             </div>
             

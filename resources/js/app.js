@@ -36,34 +36,37 @@ const editor = new EditorJS({
 
 if (saveBtn) {
   saveBtn.addEventListener('click', (e) => {
-    e.preventDefault();
+      e.preventDefault();
 
-    let aTag = e.target;
-    const url = aTag.getAttribute('href');
+      let aTag = e.target;
+      const url = aTag.getAttribute('href');
 
-    console.log(url);
+      console.log(url);
 
-    editor.save().then((outputData) => {
-      console.log('Article data: ', outputData)
+      editor.save().then((outputData) => {
+          console.log('Article data: ', outputData)
 
-      axios({
-        method: 'post',
-        url: url,
-        data: {
-          _method: 'PUT',
-          content: outputData
-        }
-      }).then((response) => {
-        console.log('Article updated successfully:', response);
-        // Actualizar el embed con el PDF generado
-        document.getElementById('pdf-embed').src = response.data.pdf_url;
+          axios({
+              method: 'post',
+              url: url,
+              data: {
+                  _method: 'PUT',
+                  abstract: document.getElementById('abstract').value,
+                  keywords: document.getElementById('keywords').value,
+                  content: outputData
+              }
+          }).then((response) => {
+              console.log('Article updated successfully:', response);
+              // Actualizar el embed con el PDF generado
+              document.getElementById('pdf-embed').src = response.data.pdf_url;
+          }).catch((error) => {
+              console.error('Error updating article:', error);
+          });
+
       }).catch((error) => {
-        console.error('Error updating article:', error);
+          console.log('Saving failed: ', error)
       });
-
-    }).catch((error) => {
-      console.log('Saving failed: ', error)
-    });
 
   }, false);
 }
+

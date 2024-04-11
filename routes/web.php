@@ -39,8 +39,6 @@ Route::middleware([
 
     //Rutas que muestra la vista upload-template
     Route::get('/templates', [App\Http\Controllers\ArticleUploadController::class, 'index'])->name('templates');
-
-    // public function store(Request $request)
     Route::post('/templates', [App\Http\Controllers\ArticleUploadController::class, 'store'])->name('templates.store');
     Route::post('/templates/preview/{template}', [App\Http\Controllers\ArticleUploadController::class, 'preview'])->name('templates.preview');
     Route::delete('/templates/{template}', [App\Http\Controllers\ArticleUploadController::class, 'destroy'])->name('templates.destroy');
@@ -48,6 +46,14 @@ Route::middleware([
     //Rutas para el controlador de edicion de detalles de articulos
     Route::get('/articles/{article}/edit/details', [App\Http\Controllers\ArticleDetailsController::class, 'edit'])->name('articles.edit-details');
     Route::put('/articles/{article}/details', [App\Http\Controllers\ArticleDetailsController::class, 'update'])->name('articles.update-details');
+
+    //Rutas para el controlador de edicion de coautores
+    Route::get('/coauthors', [App\Http\Controllers\CoauthorController::class, 'index'])->name('coauthors');
+    Route::post('/coauthors', [App\Http\Controllers\CoauthorController::class, 'store'])->name('coauthors.store');
+    Route::delete('/coauthors/{coauthor}', [App\Http\Controllers\CoauthorController::class, 'destroy'])->name('coauthors.destroy');
+    Route::get('coauthors/{coauthor}/edit', [App\Http\Controllers\CoauthorController::class, 'edit'])->name('coauthors.edit');
+    Route::put('coauthors/{coauthor}', [App\Http\Controllers\CoauthorController::class, 'update'])->name('coauthors.update');
+    
     
 
 

@@ -15,10 +15,13 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('title');
+            $table->text('abstract')->nullable();
             $table->text('content')->nullable();
-            $table->unsignedBigInteger('user_id');
+            $table->string('keywords')->nullable(); // Campo para las palabras clave
+            $table->unsignedBigInteger('user_id'); // Clave foránea para el autor principal
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
+        
     }
 
     /**
