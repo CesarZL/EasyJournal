@@ -27,8 +27,16 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'lastname',
+        'surname',
+        'phone',
+        'country',
+        'address',
         'email',
         'password',
+        'orcid',
+        'institution',
+        'affiliation',
     ];
 
     /**
@@ -62,6 +70,7 @@ class User extends Authenticatable
     ];
 
 
+    // Define the relationship between User and Article
     public function articles()
     {
         return $this->hasMany(Article::class);

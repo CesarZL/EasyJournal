@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string('title');
             $table->text('abstract')->nullable();
             $table->text('content')->nullable();
-            $table->string('keywords')->nullable(); // Campo para las palabras clave
-            $table->unsignedBigInteger('user_id'); // Clave foránea para el autor principal
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->text('keywords')->nullable();
+            $table->foreignId('user_id')->constrained('users');
+            $table->timestamps();
         });
         
     }
@@ -34,4 +33,11 @@ return new class extends Migration
 };
 
 
-// protected $fillable = ['title', 'content', 'user_id'];
+
+// $table->id();
+// $table->string('title');
+// $table->text('abstract');
+// $table->text('keywords');
+// $table->longText('content');
+// $table->foreignId('user_id')->constrained('users');
+// $table->timestamps();

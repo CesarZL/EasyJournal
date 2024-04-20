@@ -7,11 +7,10 @@ use App\Models\Template;
 use ZipArchive;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
+use Illuminate\Support\Facades\File;
 
 
-
-
-
+use function Ramsey\Uuid\v1;
 
 class ArticleUploadController extends Controller
 {
@@ -86,40 +85,31 @@ class ArticleUploadController extends Controller
             }
         }
 
-        // dd($heaviestFile);
-        // dd(pathinfo($template->file, PATHINFO_FILENAME));
-
-
         $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=storage/files/" . pathinfo($template->file, PATHINFO_FILENAME), $heaviestFile]);
         $process->run();
 
         if ($process->isSuccessful()) {
             $pdfPath = storage_path('app/public/files/' . pathinfo($template->file, PATHINFO_FILENAME) . '/' . pathinfo($heaviestFile, PATHINFO_FILENAME) . '.pdf');
-            return response()->download($pdfPath)->deleteFileAfterSend();
+            // return response()->download($pdfPath)->deleteFileAfterSend();
+
+            // Obtener el nombre del archivo PDF generado
+            $pdfFileName = pathinfo($pdfPath, PATHINFO_BASENAME);
+
+            // Mover el archivo PDF al directorio publico
+            File::move($pdfPath, public_path('pdfs/' . $pdfFileName));
+
+
+            $pdfUrl = asset('pdfs/' . $pdfFileName);
+
+            // devolver el pdf de publicPdfPath para mostrarlo en la vista
+            return view('template-preview', ['pdfUrl' => $pdfUrl]);
+
+
         } else {
-            // dd($process->getErrorOutput());
             return redirect()->route('templates')->with('error', 'No se pudo generar el PDF.');
         }
-
-    
-        // return view('preview-template', ['content' => $content]);
     }
 
-
-    // public function destroy(Template $template)
-    // {
-    //     // Delete the zip file
-    //     // Storage::delete($template->file);
-
-    //     // Delete the template entry from the database
-    //     // $template->delete();
-
-    //     // Delete the extracted folder
-        
-        
-
-    //     return redirect()->route('templates')->with('success', 'Archivo eliminado correctamente.');
-    // }
 
     public function destroy(Template $template)
     {

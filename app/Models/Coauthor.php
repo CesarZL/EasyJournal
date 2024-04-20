@@ -18,55 +18,23 @@ class Coauthor extends Model
         'address',
         'institution',
         'country',
-        'ORCID',
+        'orcid',
         'scopus_id',
         'researcher_id',
-        'author_id',
         'url',
         'affiliation',
         'affiliation_url',
-        'article_id',
-        'created_by'
+        'biography',
+        'created_by',
     ];
 
-    public function article()
+    // Define the relationship between Coauthor and Article
+    public function articles()
     {
-        return $this->belongsTo(Article::class);
+        return $this->belongsToMany(Article::class);
     }
 
-    public function getFullNameAttribute()
-    {
-        return "{$this->name} {$this->surname} {$this->last_name}";
-    }
-
-    public function getFullInstitutionAttribute()
-    {
-        return "{$this->institution} {$this->affiliation}";
-    }
-
+    
 
 }
 
-
-// $table->id();
-// $table->unsignedBigInteger('article_id');
-// $table->string('name');
-// $table->string('surname');
-// $table->string('last_name');
-// $table->string('email');
-// $table->string('phone');
-// $table->string('address');
-// $table->string('institution');
-// $table->string('country');
-// $table->string('ORCID')->nullable();
-// $table->string('scopus_id')->nullable();
-// $table->string('researcher_id')->nullable();
-// $table->string('author_id')->nullable();
-// $table->string('url')->nullable();
-// $table->string('affiliation')->nullable();
-// $table->string('affiliation_url')->nullable();
-// $table->timestamps();
-
-// $table->foreign('article_id')->references('id')->on('articles')->onDelete('cascade');
-// $table->unsignedBigInteger('created_by');
-// $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');

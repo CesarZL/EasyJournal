@@ -13,29 +13,26 @@ return new class extends Migration
     {
         Schema::create('coauthors', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('article_id')->nullable();
             $table->string('name');
-            $table->string('surname');
             $table->string('last_name');
-            $table->string('email');
-            $table->string('phone');
+            $table->string('surname');
+            $table->string('email')->unique();
+            $table->string('phone')->unique();
+            $table->string('country');
             $table->string('address');
             $table->string('institution');
-            $table->string('country');
-            $table->string('ORCID')->nullable();
+            $table->string('affiliation')->nullable();
+            $table->string('orcid')->unique();
+            $table->text('biography')->nullable();
+            $table->string('photo')->nullable();
             $table->string('scopus_id')->nullable();
             $table->string('researcher_id')->nullable();
-            $table->string('author_id')->nullable();
             $table->string('url')->nullable();
-            $table->string('affiliation')->nullable();
             $table->string('affiliation_url')->nullable();
             $table->timestamps();
-        
-            $table->foreign('article_id')->references('id')->on('articles')->onDelete('cascade');
-            $table->unsignedBigInteger('created_by');
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            // Foreign key related to the user who created this coauthor
+            $table->foreignId('created_by')->constrained('users'); 
         });
-        
     }
 
     /**

@@ -17,7 +17,7 @@
                 <form action="{{ route('coauthors.store') }}" method="POST">
                     @csrf
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="mt-4">
                             <x-label for="name" :value="__('Nombre')" />
                             <x-input id="name" name="name" type="text" value="{{ old('name') }}" />
@@ -83,9 +83,9 @@
                         </div>
 
                         <div class="mt-4">
-                            <x-label for="ORCID" :value="__('ORCID')" />
-                            <x-input id="ORCID" name="ORCID" type="text" value="{{ old('ORCID') }}" />
-                            @error('ORCID')
+                            <x-label for="orcid" :value="__('ORCID')" />
+                            <x-input id="orcid" name="orcid" type="text" value="{{ old('orcid') }}" />
+                            @error('orcid')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
                         </div>
@@ -93,41 +93,57 @@
                         <div class="mt-4">
                             <x-label for="scopus_id" :value="__('Scopus ID')" />
                             <x-input id="scopus_id" name="scopus_id" type="text" value="{{ old('scopus_id') }}" />
+                            @error('scopus_id')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="mt-4">
                             <x-label for="researcher_id" :value="__('Researcher ID')" />
                             <x-input id="researcher_id" name="researcher_id" type="text" value="{{ old('researcher_id') }}" />
-                        </div>
-
-                        <div class="mt-4">
-                            <x-label for="author_id" :value="__('Author ID')" />
-                            <x-input id="author_id" name="author_id" type="text" value="{{ old('author_id') }}" />
+                            @error('researcher_id')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="mt-4">
                             <x-label for="url" :value="__('URL')" />
                             <x-input id="url" name="url" type="text" value="{{ old('url') }}" />
+                            @error('url')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="mt-4">
                             <x-label for="affiliation" :value="__('Afiliación')" />
                             <x-input id="affiliation" name="affiliation" type="text" value="{{ old('affiliation') }}" />
+                            @error('affiliation')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="mt-4">
                             <x-label for="affiliation_url" :value="__('URL de la afiliación')" />
                             <x-input id="affiliation_url" name="affiliation_url" type="text" value="{{ old('affiliation_url') }}" />
+                            @error('affiliation_url')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
                         </div>
+
+                        <div class="col-span-2 mt-4"> <!-- Added col-span-2 class here -->
+                            <x-label for="biography" :value="__('Biografía')" />
+                            <textarea rows="5" name="biography" id="biography" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">{{ old('biography')}}</textarea>
+                            @error('biography')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                     </div>
 
                     <div class="mt-4">
                         <x-button class="block w-full" >{{ __('Guardar') }}</x-button>
                     </div>
                 </form>
-
-
-
             </div>
         </div>
         

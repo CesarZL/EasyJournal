@@ -28,8 +28,7 @@ class CoauthorController extends Controller
             'address' => 'required',
             'institution' => 'required',
             'country' => 'required',
-            'ORCID' => 'required',
-            
+            'orcid' => 'required',
         ]);
 
         //crea un nuevo coautor y lo guarda en la base de datos
@@ -42,13 +41,13 @@ class CoauthorController extends Controller
         $coauthor->address = $request->address;
         $coauthor->institution = $request->institution;
         $coauthor->country = $request->country;
-        $coauthor->ORCID = $request->ORCID;
+        $coauthor->orcid = $request->orcid;
         $coauthor->scopus_id = $request->scopus_id;
         $coauthor->researcher_id = $request->researcher_id;
-        $coauthor->author_id = $request->author_id;
         $coauthor->url = $request->url;
         $coauthor->affiliation = $request->affiliation;
         $coauthor->affiliation_url = $request->affiliation_url;
+        $coauthor->biography = $request->biography;
         $coauthor->created_by = auth()->user()->id;
 
         $coauthor->save();
@@ -59,11 +58,26 @@ class CoauthorController extends Controller
     public function edit(Coauthor $coauthor)
     {
         $coauthors = Coauthor::where('created_by', auth()->user()->id)->get();
+
+        // dd($coauthor->orcid);
         return view('edit-coauthors', ['coauthor' => $coauthor], ['coauthors' => $coauthors]);
     }
 
     public function update(Request $request, Coauthor $coauthor)
     {
+        //validaciones
+        $request->validate([
+            'name' => 'required',
+            'surname' => 'required',
+            'last_name' => 'required',
+            'email' => 'required | email',
+            'phone' => 'required',
+            'address' => 'required',
+            'institution' => 'required',
+            'country' => 'required',
+            'orcid' => 'required',
+        ]);
+
         $coauthor->update([
             'name' => $request->name,
             'surname' => $request->surname,
@@ -73,13 +87,14 @@ class CoauthorController extends Controller
             'address' => $request->address,
             'institution' => $request->institution,
             'country' => $request->country,
-            'ORCID' => $request->ORCID,
+            'orcid' => $request->orcid,
             'scopus_id' => $request->scopus_id,
             'researcher_id' => $request->researcher_id,
             'author_id' => $request->author_id,
             'url' => $request->url,
             'affiliation' => $request->affiliation,
             'affiliation_url' => $request->affiliation_url,
+            'biography' => $request->biography,
         ]);
 
         return redirect()->route('coauthors');
