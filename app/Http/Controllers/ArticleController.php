@@ -347,6 +347,44 @@ class ArticleController extends Controller
         }
     }
 
+    // Función para descargar el pdf de un artículo
+    public function pdf(Article $article)
+    {
+        // obtener la url del pdf generado
+        $pdf_url = asset("templates_public/{$article->id}/{$article->id}.pdf");
+
+        // descargar el pdf
+        return response()->download(public_path("templates_public/{$article->id}/{$article->id}.pdf"));
+    }
+
+    // Función para descargar el zip de un artículo
+    public function zip(Article $article)
+    {
+
+        // crear un nuevo archivo zip con todo el contenido de la carpeta del artículo
+        $zip_file = public_path("templates_public/{$article->id}/{$article->id}.zip");
+        $zip = new ZipArchive;
+        $zip->open($zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(public_path("templates_public/{$article->id}")), \RecursiveIteratorIterator::LEAVES_ONLY);
+
+        foreach ($files as $name => $file) {
+            // saltar los directorios
+            if (!$file->isDir()) {
+                // obtener la ruta del archivo
+                $filePath = $file->getRealPath();
+                // obtener la ruta relativa del archivo
+                $relativePath = substr($filePath, strlen(public_path("templates_public/{$article->id}")) + 1);
+                // añadir el archivo al archivo zip
+                $zip->addFile($filePath, $relativePath);
+            }
+        }
+
+        $zip->close();
+
+        // descargar el archivo zip
+        return response()->download($zip_file);
+    }
+
     // Función para mostrar la vista de edición de detalles de un artículo
     public function edit_details($id)
     {
@@ -389,6 +427,9 @@ class ArticleController extends Controller
         $article = Article::find($id);
         // Eliminar el artículo de la base de datos
         $article->delete();
+
+        // borrar la carpeta del artículo
+        File::deleteDirectory(public_path('templates_public/' . $id));
 
         return redirect()->route('dashboard');
     }

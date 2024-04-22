@@ -35,6 +35,10 @@ Route::middleware([
     Route::put('/articles/{article}', [App\Http\Controllers\ArticleController::class, 'update'])->name('articles.update');
     //ruta para eliminar el articulo
     Route::delete('/articles/{article}', [App\Http\Controllers\ArticleController::class, 'destroy'])->name('articles.destroy');
+    //ruta para descargar el pdf del articulo
+    Route::get('/articles/{article}/pdf', [App\Http\Controllers\ArticleController::class, 'pdf'])->name('articles.pdf');
+    //ruta para descargar el zip del articulo
+    Route::get('/articles/{article}/zip', [App\Http\Controllers\ArticleController::class, 'zip'])->name('articles.zip');
 
     //Rutas para mostrar la vista de detalles del articulo y donde se deben de agregar los coautores al articulo si se desea
     Route::get('/articles/{article}/details', [App\Http\Controllers\ArticleController::class, 'edit_details'])->name('articles.edit-details');
@@ -64,6 +68,8 @@ Route::middleware([
 
     //Ruta para mostrar una preview de la plantilla
     Route::get('/templates/{template}/preview', [App\Http\Controllers\ArticleUploadController::class, 'showPreview'])->name('templates.show-preview');
+
+
 
     
 
