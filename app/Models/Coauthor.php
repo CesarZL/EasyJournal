@@ -11,8 +11,8 @@ class Coauthor extends Model
 
     protected $fillable = [
         'name',
-        'surname',
-        'last_name',
+        'father_surname',
+        'mother_surname',
         'email',
         'phone',
         'address',

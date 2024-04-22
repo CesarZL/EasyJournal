@@ -51,15 +51,12 @@
                     {{-- <tr class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 {{ $i == $totalFilas - 1 ? '' : 'border-b' }}"> --}}
                     <tr class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 {{ $loop->last ? '' : 'border-b' }}">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{-- Ruta para editar el articulo --}}
-                            {{-- Route::get('/articles/{article}/edit', [App\Http\Controllers\ArticleController::class, 'edit'])->name('articles.edit'); --}}
-
                             <a href="{{ route('articles.edit', $article) }}" class="capitalize">
                                 {{ $article->title }}
                             </a>
                         </th>
                         <td class="px-6 py-4">
-                            {{ $article->user->name }}
+                            {{ $article->user->name }} {{ $article->user->father_surname }} {{ $article->user->mother_surname }}
                         </td>
                         <td class="px-6 py-4">
                             {{ $article->created_at }}
@@ -75,7 +72,6 @@
                             </form>
 
                             <a href="{{ route('articles.edit-details', $article) }}" class="ms-2 font-medium text-yellow-600 dark:text-yellow-400">Editar detalles</a>
-                            
                         </td>
                     </tr>
                 @endforeach

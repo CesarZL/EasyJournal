@@ -20,7 +20,7 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="mt-4">
-                            <x-label for="name" :value="__('Nombre')" />
+                            <x-label-required for="name" :value="__('Nombre')" />
                             <x-input id="name" name="name" type="text" value="{{ old('name', $coauthor->name) }}" />
                             @error('name')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -28,7 +28,7 @@
                         </div>
 
                         <div class="mt-4">
-                            <x-label for="surname" :value="__('Apellido paterno')" />
+                            <x-label-required for="surname" :value="__('Apellido paterno')" />
                             <x-input id="surname" name="surname" type="text" value="{{ old('surname', $coauthor->surname) }}" />
                             @error('surname')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -36,7 +36,7 @@
                         </div>
 
                         <div class="mt-4">
-                            <x-label for="last_name" :value="__('Apellido materno')" />
+                            <x-label-required for="last_name" :value="__('Apellido materno')" />
                             <x-input id="last_name" name="last_name" type="text" value="{{ old('last_name', $coauthor->last_name) }}" />
                             @error('last_name')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -44,7 +44,7 @@
                         </div>
 
                         <div class="mt-4">
-                            <x-label for="email" :value="__('Correo electrónico')" />
+                            <x-label-required for="email" :value="__('Correo electrónico')" />
                             <x-input id="email" name="email" type="email" value="{{ old('email', $coauthor->email) }}" />
                             @error('email')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -52,23 +52,50 @@
                         </div>
 
                         <div class="mt-4">
-                            <x-label for="institution" :value="__('Institución')" />
+                            <x-label-required for="institution" :value="__('Institución')" />
                             <x-input id="institution" name="institution" type="text" value="{{ old('institution', $coauthor->institution) }}" />
                             @error('institution')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror                        
+                        </div>
+
+                        <div class="mt-4">
+                            <x-label for="affiliation_url" :value="__('URL de la institution')" />
+                            <x-input id="affiliation_url" name="affiliation_url" type="text" value="{{ old('affiliation_url', $coauthor->affiliation_url) }}" />
+                            @error('affiliation_url')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
                         </div>
 
+                        
                         <div class="mt-4">
-                            <x-label for="country" :value="__('País')" />
-                            <x-input id="country" name="country" type="text" value="{{ old('country', $coauthor->country) }}" />
+                            <x-label-required for="affiliation" :value="__('Afiliación')" />
+                            <x-input id="affiliation" name="affiliation" type="text" value="{{ old('affiliation', $coauthor->affiliation) }}" />
+                            @error('affiliation')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        {{-- select de paises, el value es el nombre del pais --}}
+                        <div class="mt-4">
+                            <x-label-required for="country" :value="__('País')" />
+                            <select id="country" name="country" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option value="México" @if(old('country', $coauthor->country) == 'México') selected @endif>México</option>
+                                <option value="Estados Unidos" @if(old('country', $coauthor->country) == 'Estados Unidos') selected @endif>Estados Unidos</option>
+                                <option value="Canadá" @if(old('country', $coauthor->country) == 'Canadá') selected @endif>Canadá</option>
+                                <option value="Argentina" @if(old('country', $coauthor->country) == 'Argentina') selected @endif>Argentina</option>
+                                <option value="Brasil" @if(old('country', $coauthor->country) == 'Brasil') selected @endif>Brasil</option>
+                                <option value="Colombia" @if(old('country', $coauthor->country) == 'Colombia') selected @endif>Colombia</option>
+                                <option value="Chile" @if(old('country', $coauthor->country) == 'Chile') selected @endif>Chile</option>
+                            </select>
                             @error('country')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
                         </div>
 
+
                         <div class="mt-4">
-                            <x-label for="phone" :value="__('Teléfono')" />
+                            <x-label-required for="phone" :value="__('Teléfono')" />
                             <x-input id="phone" name="phone" type="text" value="{{ old('phone', $coauthor->phone) }}" />
                             @error('phone')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -76,7 +103,7 @@
                         </div>
 
                         <div class="mt-4">
-                            <x-label for="address" :value="__('Dirección')" />
+                            <x-label-required for="address" :value="__('Dirección')" />
                             <x-input id="address" name="address" type="text" value="{{ old('address', $coauthor->address) }}" />
                             @error('address')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -84,8 +111,8 @@
                         </div>
 
                         <div class="mt-4">
-                            <x-label for="orcid" :value="__('ORCID')" />
-                            <x-input id="orcid" name="orcid" type="text" value="{{ old('orcid', $coauthor->orcid) }}" />
+                            <x-label-required for="orcid" :value="__('ORCID')" />
+                            <x-input id="orcid" type="text" name="orcid" :value="old('orcid')" required autocomplete="orcid" oninput="formatOrcid(this)" maxlength="19" pattern="[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}"/>
                             @error('orcid')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
@@ -115,27 +142,11 @@
                             @enderror
                         </div>
 
-                        <div class="mt-4">
-                            <x-label for="affiliation" :value="__('Afiliación')" />
-                            <x-input id="affiliation" name="affiliation" type="text" value="{{ old('affiliation', $coauthor->affiliation) }}" />
-                            @error('affiliation')
-                                <span class="text-red-500 text-sm">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="mt-4">
-                            <x-label for="affiliation_url" :value="__('URL de la afiliación')" />
-                            <x-input id="affiliation_url" name="affiliation_url" type="text" value="{{ old('affiliation_url', $coauthor->affiliation_url) }}" />
-                            @error('affiliation_url')
-                                <span class="text-red-500 text-sm">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="col-span-2 mt-4">
+                        <div class="col-span-2 mt-4"> <!-- Added col-span-2 class here -->
                             <x-label for="biography" :value="__('Biografía')" />
-                            <textarea rows="5" name="biography" id="biography" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">{{ old('biography', $coauthor->biography) }}</textarea>
+                            <textarea rows="5" name="biography" id="biography" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">{{old('biography', $coauthor->biography) }}</textarea>
                             @error('biography')
-                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
                         </div>
 
@@ -209,8 +220,17 @@
     
     </div>
 
+    <script>
+        function formatOrcid(input) {
+            // Elimina todos los guiones previamente ingresados
+            var orcid = input.value.replace(/-/g, '');
+        
+            // Agrega guiones cada 4 dígitos
+            var formattedOrcid = orcid.match(/.{1,4}/g).join('-');
+        
+            // Actualiza el valor del campo con el ORCID formateado
+            input.value = formattedOrcid;
+        }
+        </script>
 
 </x-app-layout>
-
-
-

@@ -23,13 +23,13 @@
                         </div>
                 
                         <div>
-                            <x-label for="lastname" value="{{ __('Apellido') }}" />
-                            <x-input id="lastname" class="block mt-1 w-full" type="text" name="lastname" :value="old('lastname')" required autocomplete="lastname" />
+                            <x-label for="father_surname" value="{{ __('Apellido') }}" />
+                            <x-input id="father_surname" class="block mt-1 w-full" type="text" name="father_surname" :value="old('father_surname')" required autocomplete="father_surname" />
                         </div>
                 
                         <div>
-                            <x-label for="surname" value="{{ __('Segundo apellido') }}" />
-                            <x-input id="surname" class="block mt-1 w-full" type="text" name="surname" :value="old('surname')" required autocomplete="surname" />
+                            <x-label for="mother_surname" value="{{ __('Segundo apellido') }}" />
+                            <x-input id="mother_surname" class="block mt-1 w-full" type="text" name="mother_surname" :value="old('mother_surname')" required autocomplete="mother_surname" />
                         </div>
                 
                         <div>
@@ -39,21 +39,29 @@
                 
                         <div>
                             <x-label for="country" value="{{ __('País') }}" />
-                            <x-input id="country" class="block mt-1 w-full" type="text" name="country" :value="old('country')" required autocomplete="country" />
+                            <select id="country" name="country" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option value="México">México</option>
+                                <option value="Estados Unidos">Estados Unidos</option>
+                                <option value="Canadá">Canadá</option>
+                                <option value="Argentina">Argentina</option>
+                                <option value="Brasil">Brasil</option>
+                                <option value="Colombia">Colombia</option>
+                                <option value="Chile">Chile</option>
+                            </select>
                         </div>
                         
                         <div>
                             <x-label for="orcid" value="{{ __('ORCID') }}" />
-                            <x-input id="orcid" class="block mt-1 w-full" type="text" name="orcid" :value="old('orcid')" required autocomplete="orcid" />
+                            <x-input id="orcid" class="block mt-1 w-full" type="text" name="orcid" :value="old('orcid')" required autocomplete="orcid" oninput="formatOrcid(this)" maxlength="19" pattern="[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}"/>
                         </div>
 
                         <div>
-                            <x-label for="institution" value="{{ __('Institution') }}" />
+                            <x-label for="institution" value="{{ __('Institución') }}" />
                             <x-input id="institution" class="block mt-1 w-full" type="text" name="institution" :value="old('institution')" required autocomplete="institution" />
                         </div>
 
                         <div>
-                            <x-label for="affiliation" value="{{ __('Affiliation') }}" />
+                            <x-label for="affiliation" value="{{ __('Afiliación') }}" />
                             <x-input id="affiliation" class="block mt-1 w-full" type="text" name="affiliation" :value="old('affiliation')" required autocomplete="affiliation" />
                         </div>
                 
@@ -102,6 +110,19 @@
         </div>
       </div>
       
+      <script>
+        function formatOrcid(input) {
+            // Elimina todos los guiones previamente ingresados
+            var orcid = input.value.replace(/-/g, '');
+        
+            // Agrega guiones cada 4 dígitos
+            var formattedOrcid = orcid.match(/.{1,4}/g).join('-');
+        
+            // Actualiza el valor del campo con el ORCID formateado
+            input.value = formattedOrcid;
+        }
+        </script>
+        
 
 
 </x-guest-layout>

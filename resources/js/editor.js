@@ -1,6 +1,6 @@
 import EditorJS from "@editorjs/editorjs";
 import Header from '@editorjs/header'; 
-import axios from 'axios';
+
 
 window.addEventListener("DOMContentLoaded", (event) => {
     const data = JSON.parse(document.getElementById("content").value || "{}");

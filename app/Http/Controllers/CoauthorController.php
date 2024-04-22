@@ -8,6 +8,12 @@ use App\Models\Coauthor;
 
 class CoauthorController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index()
     {
         // traer todos los coautores del usuario logueado
@@ -21,8 +27,8 @@ class CoauthorController extends Controller
         //validaciones
         $request->validate([
             'name' => 'required',
-            'surname' => 'required',
-            'last_name' => 'required',
+            'father_surname' => 'required',
+            'mother_surname' => 'required',
             'email' => 'required | email',
             'phone' => 'required',
             'address' => 'required',
@@ -34,8 +40,8 @@ class CoauthorController extends Controller
         //crea un nuevo coautor y lo guarda en la base de datos
         $coauthor = new Coauthor;
         $coauthor->name = $request->name;
-        $coauthor->surname = $request->surname;
-        $coauthor->last_name = $request->last_name;
+        $coauthor->father_surname = $request->father_surname;
+        $coauthor->mother_surname = $request->mother_surname;
         $coauthor->email = $request->email;
         $coauthor->phone = $request->phone;
         $coauthor->address = $request->address;
@@ -68,20 +74,20 @@ class CoauthorController extends Controller
         //validaciones
         $request->validate([
             'name' => 'required',
-            'surname' => 'required',
-            'last_name' => 'required',
+            'father_surname' => 'required',
+            'mother_surname' => 'required',
             'email' => 'required | email',
-            'phone' => 'required',
+            'phone' => ['required', 'string', 'max:10'],
             'address' => 'required',
             'institution' => 'required',
             'country' => 'required',
-            'orcid' => 'required',
+            'orcid' => ['nullable', 'string', 'unique:users', 'max:20', 'min:16', 'regex:/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}/'],
         ]);
 
         $coauthor->update([
             'name' => $request->name,
-            'surname' => $request->surname,
-            'last_name' => $request->last_name,
+            'father_surname' => $request->father_surname,
+            'mother_surname' => $request->mother_surname,
             'email' => $request->email,
             'phone' => $request->phone,
             'address' => $request->address,

@@ -21,12 +21,12 @@ class CreateNewUser implements CreatesNewUsers
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
-            'lastname' => ['required', 'string', 'max:255'],
-            'surname' => ['required', 'string', 'max:255'],
+            'father_surname' => ['required', 'string', 'max:255'],
+            'mother_surname' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:10'],
             'country' => ['required', 'string', 'max:50'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'orcid' => ['nullable', 'string', 'max:16'],
+            'orcid' => ['nullable', 'string', 'unique:users', 'max:20', 'min:16', 'regex:/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}/'],
             'institution' => ['required', 'string', 'max:255'],
             'affiliation' => ['nullable', 'string', 'max:255'],
             'password' => $this->passwordRules(),
@@ -35,8 +35,8 @@ class CreateNewUser implements CreatesNewUsers
 
         return User::create([
             'name' => $input['name'],
-            'lastname' => $input['lastname'],
-            'surname' => $input['surname'],
+            'father_surname' => $input['father_surname'],
+            'mother_surname' => $input['mother_surname'],
             'phone' => $input['phone'],
             'country' => $input['country'],
             'email' => $input['email'],

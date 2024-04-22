@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('coauthors', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('last_name');
-            $table->string('surname');
+            $table->string('father_surname');
+            $table->string('mother_surname');
             $table->string('email')->unique();
             $table->string('phone')->unique();
             $table->string('country');
