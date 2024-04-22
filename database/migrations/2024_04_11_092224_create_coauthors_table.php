@@ -31,7 +31,9 @@ return new class extends Migration
             $table->string('affiliation_url')->nullable();
             $table->timestamps();
             // Foreign key related to the user who created this coauthor
-            $table->foreignId('created_by')->constrained('users'); 
+            // $table->foreignId('created_by')->constrained('users');
+            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+
         });
     }
 

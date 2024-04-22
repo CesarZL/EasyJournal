@@ -27,6 +27,10 @@ class ArticleController extends Controller
         //retorna la vista del dashboard con los articulos del usuario logueado
         $articles = Article::where('user_id', auth()->user()->id)->get();
 
+        $title = 'Borrar artículo';
+        $text = "¿Estás seguro de que quieres borrar este artículo?";
+        confirmDelete($title, $text);
+
         //retorna la vista del dashboard con los articulos del usuario logueado
         return view('dashboard', compact('articles'));
     }
@@ -46,7 +50,10 @@ class ArticleController extends Controller
         $article->save();
 
         // Redirige al dashboard después de crear un nuevo artículo
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard')->with('success', 'Artículo creado correctamente.');
+
+        // return redirect()->route('templates')->with('success', 'Plantilla subida correctamente.');
+
     }
 
     // Función para mostrar la vista de edición de un artículo
@@ -261,12 +268,26 @@ class ArticleController extends Controller
             // leer el contenido del archivo .tex modificado
             $tex_content = file_get_contents($output_file);
 
-            // prompt para el modelo de lenguaje gemini pro
-            $prompt = "Your purpose is to fill in sections of latex files with the information I will provide you, first, you are going to fill the author information, coauthors and affiliations and all those information that is needed, if you don't have the information, you must leave it blank, if you have extra data from the author or coauthors but isnt requiere in the template you must leave it blank, if the authors or coauthors share the same affiliation and institution then they can share the same number of affiliation and institution, if they don't share the same affiliation and institution then they need to have different numbers of affiliation and institution. You are going to fill that information with this data: \n\nThis is the principal author information: \n\nName: " . (auth()->user()->name ? auth()->user()->name . " " : "") . (auth()->user()->father_surname ? auth()->user()->father_surname . " " : "") . (auth()->user()->mother_surname ? auth()->user()->mother_surname : "") . "\nORCID: " . (auth()->user()->orcid ? auth()->user()->orcid : "") . "\nAffiliation: " . (auth()->user()->affiliation ? auth()->user()->affiliation : "") . "\nInstitution: " . (auth()->user()->institution ? auth()->user()->institution : "") . "\nEmail: " . (auth()->user()->email ? auth()->user()->email : "") . "\n\nAnd this is the coauthors information: \n\n";
-            for ($i = 0; $i < count($article->coauthors); $i++) {
-                $prompt .= "Name: " . $article->coauthors[$i]->name . " " . $article->coauthors[$i]->father_surname . " " . $article->coauthors[$i]->mother_surname . "\nORCID: " . $article->coauthors[$i]->orcid . "\nAffiliation: " . $article->coauthors[$i]->affiliation . "\nInstitution: " . $article->coauthors[$i]->institution . "\nEmail: " . $article->coauthors[$i]->email . "\n\n";
+            // prompt para el modelo de lenguaje gemini pro si el articulo tiene coautores
+
+            if (count($article->coauthors) > 0) {
+
+                $prompt = "Your purpose is to fill in sections of latex files with the information I will provide you, first, you are going to fill the author information, coauthors and affiliations and all those information that is needed, if you don't have the information, you must leave it blank, if you have extra data from the author or coauthors but isnt requiere in the template you must leave it blank, if the authors or coauthors share the same affiliation and institution then they can share the same number of affiliation and institution, if they don't share the same affiliation and institution then they need to have different numbers of affiliation and institution. You are going to fill that information with this data: \n\nThis is the principal author information: \n\nName: " . (auth()->user()->name ? auth()->user()->name . " " : "") . (auth()->user()->father_surname ? auth()->user()->father_surname . " " : "") . (auth()->user()->mother_surname ? auth()->user()->mother_surname : "") . "\nORCID: " . (auth()->user()->orcid ? auth()->user()->orcid : "") . "\nAffiliation: " . (auth()->user()->affiliation ? auth()->user()->affiliation : "") . "\nInstitution: " . (auth()->user()->institution ? auth()->user()->institution : "") . "\nEmail: " . (auth()->user()->email ? auth()->user()->email : "") . "\n\nAnd this is the coauthors information: \n\n";
+                for ($i = 0; $i < count($article->coauthors); $i++) {
+                    $prompt .= "Name: " . $article->coauthors[$i]->name . " " . $article->coauthors[$i]->father_surname . " " . $article->coauthors[$i]->mother_surname . "\nORCID: " . $article->coauthors[$i]->orcid . "\nAffiliation: " . $article->coauthors[$i]->affiliation . "\nInstitution: " . $article->coauthors[$i]->institution . "\nEmail: " . $article->coauthors[$i]->email . "\n\n";
+                }
+                $prompt .= "\n\nAfter you fill the author information, you're going to give me the updated latex file ready to compile without any explanation, just the code. The latex without the author information is in the file " . $tex_content . ".\n\n";    
+
+            } else {
+                $prompt = "Your purpose is to fill in sections of latex files with the information I will provide you, first, you are going to fill the author information and all those information that is needed, if you don't have the information, you must leave it blank, if you have extra data from the author but isnt requiere in the template you must leave it blank, if there is just one author you must have only one affiliation and institution. In this case there is just one author and you must delete other dummy author or coauthor in the latex file and put only the author that i am given to you. You are going to fill that information with this data: \n\nThis is the principal author information: \n\nName: " . (auth()->user()->name ? auth()->user()->name . " " : "") . (auth()->user()->father_surname ? auth()->user()->father_surname . " " : "") . (auth()->user()->mother_surname ? auth()->user()->mother_surname : "") . "\nORCID: " . (auth()->user()->orcid ? auth()->user()->orcid : "") . "\nAffiliation: " . (auth()->user()->affiliation ? auth()->user()->affiliation : "") . "\nInstitution: " . (auth()->user()->institution ? auth()->user()->institution : "") . "\nEmail: " . (auth()->user()->email ? auth()->user()->email : "");
+                $prompt .= "\n\nAfter you fill the author information, you're going to give me the updated latex file ready to compile without any explanation, just the code. The latex without the author information is in the file " . $tex_content . ".\n\n";    
             }
-            $prompt .= "\n\nAfter you fill the author information, you're going to give me the updated latex file ready to compile without any explanation, just the code. The latex without the author information is in the file " . $tex_content . ".\n\n";
+
+            // $prompt = "Your purpose is to fill in sections of latex files with the information I will provide you, first, you are going to fill the author information, coauthors and affiliations and all those information that is needed, if you don't have the information, you must leave it blank, if you have extra data from the author or coauthors but isnt requiere in the template you must leave it blank, if the authors or coauthors share the same affiliation and institution then they can share the same number of affiliation and institution, if they don't share the same affiliation and institution then they need to have different numbers of affiliation and institution. You are going to fill that information with this data: \n\nThis is the principal author information: \n\nName: " . (auth()->user()->name ? auth()->user()->name . " " : "") . (auth()->user()->father_surname ? auth()->user()->father_surname . " " : "") . (auth()->user()->mother_surname ? auth()->user()->mother_surname : "") . "\nORCID: " . (auth()->user()->orcid ? auth()->user()->orcid : "") . "\nAffiliation: " . (auth()->user()->affiliation ? auth()->user()->affiliation : "") . "\nInstitution: " . (auth()->user()->institution ? auth()->user()->institution : "") . "\nEmail: " . (auth()->user()->email ? auth()->user()->email : "") . "\n\nAnd this is the coauthors information: \n\n";
+            // for ($i = 0; $i < count($article->coauthors); $i++) {
+            //     $prompt .= "Name: " . $article->coauthors[$i]->name . " " . $article->coauthors[$i]->father_surname . " " . $article->coauthors[$i]->mother_surname . "\nORCID: " . $article->coauthors[$i]->orcid . "\nAffiliation: " . $article->coauthors[$i]->affiliation . "\nInstitution: " . $article->coauthors[$i]->institution . "\nEmail: " . $article->coauthors[$i]->email . "\n\n";
+            // }
+            // $prompt .= "\n\nAfter you fill the author information, you're going to give me the updated latex file ready to compile without any explanation, just the code. The latex without the author information is in the file " . $tex_content . ".\n\n";
 
             // mandar el contenido del archivo .tex modificado al modelo de lenguaje gemini pro
             $tex_content = Gemini::geminiPro()->generateContent($prompt);
@@ -287,14 +308,26 @@ class ArticleController extends Controller
                 $tex_content = preg_replace('/(\\\\begin\{keywords\}.*\\\\end\{keywords\})/s', "\\begin{keywords}\n" . $article->keywords . "\n\\end{keywords}", $tex_content);
             }
 
+            //buscar y reemplazar &nbsp; por espacio en blanco
+            $my_tex_content = str_replace("&nbsp;", " ", $my_tex_content);
+            //buscar y reemplazar &, _, %, $, #, {, }, ~, ^, \ por su respectiva secuencia de escape
+            $my_tex_content = str_replace("&", "\\&", $my_tex_content);
+            $my_tex_content = str_replace("_", "\\_", $my_tex_content);
+            $my_tex_content = str_replace("%", "\\%", $my_tex_content);
+            $my_tex_content = str_replace("$", "\\$", $my_tex_content);
+            $my_tex_content = str_replace("#", "\\#", $my_tex_content);
+            $my_tex_content = str_replace("~", "\\textasciitilde ", $my_tex_content);
+            $my_tex_content = str_replace("^", "\\textasciicircum ", $my_tex_content);
+
             // busca la sección SECTIONBASE y la reemplaza por el contenido del artículo
             $tex_content = preg_replace('/(\\\\section\{SECTIONBASE\})/', $my_tex_content, $tex_content);
-                       
+            
             // guardando el contenido del articulo en un archivo .tex
             file_put_contents($output_file, $tex_content);            
 
-            // compilar el archivo .tex
-            $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=templates_public/{$article->id}", $output_file]);
+            // compilar el archivo .tex con -interaction=nonstopmode para que no se detenga en caso de error
+            // $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=templates_public/{$article->id}", $output_file]);
+            $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-interaction=nonstopmode", "-output-directory=templates_public/{$article->id}", $output_file]);
             $process->run();
 
             // verificar si hubo un error al compilar el archivo .tex
@@ -345,7 +378,8 @@ class ArticleController extends Controller
 
 
         // Redirige de vuelta a la página de detalles del artículo
-        return redirect()->route('articles.edit', $article->id);
+        return redirect()->route('articles.edit', $article->id)->with('success', 'Detalles actualizados correctamente.');
+        
     }
     
     // Función para eliminar un artículo de la base de datos

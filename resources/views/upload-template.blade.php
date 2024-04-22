@@ -17,11 +17,16 @@
                                 <button type="submit" class="dark:bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md ml-2">Ver</button>
                             </form>
 
-                            <form action="{{ route('templates.destroy', $template->id) }}" method="POST" class="inline">
+                            {{-- <form action="{{ route('templates.destroy', $template->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="dark:bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md ml-2">Eliminar</button>
-                            </form>
+                            </form> --}}
+
+                            {{-- <a href="{{ route('coauthors.destroy', $coauthor->id) }}" class="px-4 py-2 bg-red-500 text-white rounded-lg mr-2 hover:bg-red-600" data-confirm-delete="true">Eliminar</a> --}}
+
+                            <a href="{{ route('templates.destroy', $template->id) }}" class="dark:bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md ml-2" data-confirm-delete="true">Eliminar</a>
+
                         </div>
                     </div>
 

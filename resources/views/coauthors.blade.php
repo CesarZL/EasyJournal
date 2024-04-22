@@ -187,11 +187,7 @@
 
                          
                          <div class="flex justify-end mt-4">
-                             <form id="delete-coauthor-{{$coauthor->id}}" action="{{ route('coauthors.destroy', $coauthor) }}" method="POST">
-                                 @csrf
-                                 @method('DELETE')
-                             </form>
-                             <button class="px-4 py-2 bg-red-500 text-white rounded-lg mr-2 hover:bg-red-600" onclick="event.preventDefault(); document.getElementById('delete-coauthor-{{$coauthor->id}}').submit()">Eliminar</button>
+                             <a href="{{ route('coauthors.destroy', $coauthor->id) }}" class="px-4 py-2 bg-red-500 text-white rounded-lg mr-2 hover:bg-red-600" data-confirm-delete="true">Eliminar</a>
                              <button class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600" onclick="window.location.href='{{ route('coauthors.edit', $coauthor->id) }}'">Editar</button>
                          </div>
                      </div>

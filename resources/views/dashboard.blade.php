@@ -65,11 +65,15 @@
                             {{ $article->updated_at }}
                         </td>
                         <td class="px-6 py-4">
-                            <form action="{{ route('articles.destroy', $article) }}" method="POST" class="inline">
+                            {{-- <form action="{{ route('articles.destroy', $article) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="font-medium text-red-600 dark:text-red-500">Borrar artículo</button>
-                            </form>
+                            </form> --}}
+
+                            {{-- <a href="{{ route('coauthors.destroy', $coauthor->id) }}" class="px-4 py-2 bg-red-500 text-white rounded-lg mr-2 hover:bg-red-600" data-confirm-delete="true">Eliminar</a> --}}
+
+                            <a href="{{ route('articles.destroy', $article) }}" class="font-medium text-red-600 dark:text-red-500" data-confirm-delete="true">Borrar artículo</a>
 
                             <a href="{{ route('articles.edit-details', $article) }}" class="ms-2 font-medium text-yellow-600 dark:text-yellow-400">Editar detalles</a>
                         </td>

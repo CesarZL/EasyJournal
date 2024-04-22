@@ -38,6 +38,9 @@
 
         </div>
 
+        @include('sweetalert::alert')
+
+
         @stack('modals')
 
         @stack('scripts')

@@ -24,6 +24,11 @@ class ArticleUploadController extends Controller
         // leer todas las plantillas de la base de datos y mostrarlas en la vista upload-template
         $userId = auth()->user()->id;
         $templates = Template::where('user_id', $userId)->get();
+
+        $title = 'Borrar plantilla';
+        $text = "¿Estás seguro de que quieres borrar esta plantilla?";
+        confirmDelete($title, $text);
+
         return view('upload-template', ['templates' => $templates]);
     }
 
@@ -145,6 +150,8 @@ class ArticleUploadController extends Controller
 
         } else {
             return redirect()->route('templates')->with('error', 'No se pudo generar el PDF.');
+            // return redirect('tasks')->with('success', 'Task Created Successfully!');
+
         }
     }
 

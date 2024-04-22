@@ -18,6 +18,10 @@ class CoauthorController extends Controller
     {
         // traer todos los coautores del usuario logueado
         $coauthors = Coauthor::where('created_by', auth()->user()->id)->get();
+
+        $title = 'Borrar coautor';
+        $text = "¿Estás seguro de que quieres borrar este coautor?";
+        confirmDelete($title, $text);
         
         return view('coauthors')->with('coauthors', $coauthors);
     }
@@ -58,7 +62,7 @@ class CoauthorController extends Controller
 
         $coauthor->save();
 
-        return redirect()->route('coauthors');
+        return redirect()->route('coauthors')->with('success', 'Coauthor creado correctamente');
     }
 
     public function edit(Coauthor $coauthor)
@@ -103,13 +107,13 @@ class CoauthorController extends Controller
             'biography' => $request->biography,
         ]);
 
-        return redirect()->route('coauthors');
+        return redirect()->route('coauthors')->with('success', 'Coauthor actualizado correctamente');
     }
 
     public function destroy(Coauthor $coauthor)
     {
         $coauthor->delete();
-        return redirect()->route('coauthors');
+        return redirect()->route('coauthors')->with('success', 'Coauthor eliminado correctamente');
     }
 
 

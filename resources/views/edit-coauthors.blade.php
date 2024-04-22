@@ -28,17 +28,17 @@
                         </div>
 
                         <div class="mt-4">
-                            <x-label-required for="surname" :value="__('Apellido paterno')" />
-                            <x-input id="surname" name="surname" type="text" value="{{ old('surname', $coauthor->surname) }}" />
-                            @error('surname')
+                            <x-label-required for="father_surname" :value="__('Apellido paterno')" />
+                            <x-input id="father_surname" name="father_surname" type="text" value="{{ old('father_surname', $coauthor->father_surname) }}" />
+                            @error('father_surname')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
                         </div>
 
                         <div class="mt-4">
-                            <x-label-required for="last_name" :value="__('Apellido materno')" />
-                            <x-input id="last_name" name="last_name" type="text" value="{{ old('last_name', $coauthor->last_name) }}" />
-                            @error('last_name')
+                            <x-label-required for="mother_surname" :value="__('Apellido materno')" />
+                            <x-input id="mother_surname" name="mother_surname" type="text" value="{{ old('last_name', $coauthor->mother_surname) }}" />
+                            @error('mother_surname')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
                         </div>
@@ -112,7 +112,7 @@
 
                         <div class="mt-4">
                             <x-label-required for="orcid" :value="__('ORCID')" />
-                            <x-input id="orcid" type="text" name="orcid" :value="old('orcid')" required autocomplete="orcid" oninput="formatOrcid(this)" maxlength="19" pattern="[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}"/>
+                            <x-input id="orcid" type="text" name="orcid" :value="old('orcid')" required autocomplete="orcid" oninput="formatOrcid(this)" maxlength="19" pattern="[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}" value="{{ old('orcid', $coauthor->orcid) }}" />
                             @error('orcid')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
@@ -202,12 +202,7 @@
         
                                  
                                  <div class="flex justify-end mt-4">
-                                     <form id="delete-coauthor-{{$coauthor->id}}" action="{{ route('coauthors.destroy', $coauthor) }}" method="POST">
-                                         @csrf
-                                         @method('DELETE')
-                                     </form>
-                                     <button class="px-4 py-2 bg-red-500 text-white rounded-lg mr-2 hover:bg-red-600" onclick="event.preventDefault(); document.getElementById('delete-coauthor-{{$coauthor->id}}').submit()">Eliminar</button>
-                                     <button class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600" onclick="window.location.href='{{ route('coauthors.edit', $coauthor->id) }}'">Editar</button>
+                                      <button class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600" onclick="window.location.href='{{ route('coauthors.edit', $coauthor->id) }}'">Editar</button>
                                  </div>
                              </div>
                              @endforeach
