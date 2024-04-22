@@ -161,8 +161,12 @@ class ArticleController extends Controller
                 // crea el archivo tex
                 File::put(public_path('templates_public/' . $article->id . '/' . $article->id . '.tex'), $tex_content);
 
-                // ejecutar el comando pdflatex para compilar el archivo .tex
-                $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=templates_public/{$article->id}", public_path('templates_public/' . $article->id . '/' . $article->id . '.tex')]);
+                // ejecutar el comando pdflatex para compilar el archivo .tex en windows
+                // $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=templates_public/{$article->id}", public_path('templates_public/' . $article->id . '/' . $article->id . '.tex')]);
+                
+                // ejecutar el comando pdflatex para compilar el archivo .tex en linux
+                $process = new Process(['pdflatex', "-output-directory=templates_public/{$article->id}", public_path('templates_public/' . $article->id . '/' . $article->id . '.tex')]);
+
                 $process->run();
 
                 // verificar si hubo un error al compilar el archivo .tex
@@ -327,7 +331,13 @@ class ArticleController extends Controller
 
             // compilar el archivo .tex con -interaction=nonstopmode para que no se detenga en caso de error
             // $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=templates_public/{$article->id}", $output_file]);
-            $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-interaction=nonstopmode", "-output-directory=templates_public/{$article->id}", $output_file]);
+
+            // compilar el archivo .tex con -interaction=nonstopmode en windows
+            // $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-interaction=nonstopmode", "-output-directory=templates_public/{$article->id}", $output_file]);
+            
+            // ejecutar el comando pdflatex para compilar el archivo .tex en linux
+            $process = new Process(['pdflatex', "-interaction=nonstopmode", "-output-directory=templates_public/{$article->id}", $output_file]);
+            
             $process->run();
 
             // verificar si hubo un error al compilar el archivo .tex

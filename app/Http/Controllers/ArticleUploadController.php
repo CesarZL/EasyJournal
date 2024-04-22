@@ -87,7 +87,12 @@ class ArticleUploadController extends Controller
             }
         }
 
-        $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=storage/files/" . pathinfo($template->file, PATHINFO_FILENAME), $heaviestFile]);
+        // Compilar el archivo .tex más grande  en windows
+        // $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=storage/files/" . pathinfo($template->file, PATHINFO_FILENAME), $heaviestFile]);
+       
+        // ejecutar el comando pdflatex para compilar el archivo .tex en linux
+        $process = new Process(['pdflatex', "-output-directory=storage/files/" . pathinfo($template->file, PATHINFO_FILENAME), $heaviestFile]);
+
         $process->run();
 
         if (!$process->isSuccessful()) {
@@ -125,7 +130,11 @@ class ArticleUploadController extends Controller
             }
         }
 
-        $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=storage/files/" . pathinfo($template->file, PATHINFO_FILENAME), $heaviestFile]);
+        // Compilar el archivo .tex más grande en windows
+        // $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=storage/files/" . pathinfo($template->file, PATHINFO_FILENAME), $heaviestFile]);
+       
+        // ejecutar el comando pdflatex para compilar el archivo .tex en linux
+        $process = new Process(['pdflatex', "-output-directory=storage/files/" . pathinfo($template->file, PATHINFO_FILENAME), $heaviestFile]);
         $process->run();
 
         if ($process->isSuccessful()) {
