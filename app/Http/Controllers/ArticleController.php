@@ -165,7 +165,7 @@ class ArticleController extends Controller
                 // $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=templates_public/{$article->id}", public_path('templates_public/' . $article->id . '/' . $article->id . '.tex')]);
                 
                 // ejecutar el comando pdflatex para compilar el archivo .tex en linux
-                $process = new Process(['pdflatex', "-output-directory=templates_public/{$article->id}", public_path('templates_public/' . $article->id . '/' . $article->id . '.tex')]);
+                $process = new Process(['/usr/bin/pdflatex', "-output-directory=templates_public/{$article->id}", public_path('templates_public/' . $article->id . '/' . $article->id . '.tex')]);
 
                 $process->run();
 
@@ -336,7 +336,7 @@ class ArticleController extends Controller
             // $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-interaction=nonstopmode", "-output-directory=templates_public/{$article->id}", $output_file]);
             
             // ejecutar el comando pdflatex para compilar el archivo .tex en linux
-            $process = new Process(['pdflatex', "-interaction=nonstopmode", "-output-directory=templates_public/{$article->id}", $output_file]);
+            $process = new Process(['/usr/bin/pdflatex', "-output-directory=templates_public/{$article->id}", $output_file]);
             
             $process->run();
 

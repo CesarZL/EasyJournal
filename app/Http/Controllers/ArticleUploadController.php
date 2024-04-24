@@ -8,6 +8,7 @@ use ZipArchive;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\File;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 
 use function Ramsey\Uuid\v1;
@@ -91,7 +92,7 @@ class ArticleUploadController extends Controller
         // $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=storage/files/" . pathinfo($template->file, PATHINFO_FILENAME), $heaviestFile]);
        
         // ejecutar el comando pdflatex para compilar el archivo .tex en linux
-        $process = new Process(['pdflatex', "-output-directory=storage/files/" . pathinfo($template->file, PATHINFO_FILENAME), $heaviestFile]);
+        $process = new Process(['/usr/bin/pdflatex', "-output-directory=storage/files/" . pathinfo($template->file, PATHINFO_FILENAME), $heaviestFile]);
 
         $process->run();
 
@@ -100,6 +101,10 @@ class ArticleUploadController extends Controller
             Storage::delete($zipPath);
             Storage::deleteDirectory('public/files/' . pathinfo($zipPath, PATHINFO_FILENAME));
             $template->delete();
+
+            // lanzar una excepción
+            $exception = new ProcessFailedException($process);
+            throw $exception;
             return redirect()->route('templates')->with('error', 'No se pudo generar el PDF de esta plantilla.');
         }
 
@@ -134,7 +139,7 @@ class ArticleUploadController extends Controller
         // $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=storage/files/" . pathinfo($template->file, PATHINFO_FILENAME), $heaviestFile]);
        
         // ejecutar el comando pdflatex para compilar el archivo .tex en linux
-        $process = new Process(['pdflatex', "-output-directory=storage/files/" . pathinfo($template->file, PATHINFO_FILENAME), $heaviestFile]);
+        $process = new Process(['/usr/bin/pdflatex', "-output-directory=storage/files/" . pathinfo($template->file, PATHINFO_FILENAME), $heaviestFile]);
         $process->run();
 
         if ($process->isSuccessful()) {
