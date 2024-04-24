@@ -31,6 +31,10 @@ Route::middleware([
     Route::post('/articles', [App\Http\Controllers\ArticleController::class, 'store'])->name('articles.store');
     //ruta para mostrar la vista de edicion del articulo
     Route::get('/articles/{article}', [App\Http\Controllers\ArticleController::class, 'edit'])->name('articles.edit');
+
+    //Ruta para subir una imagen
+    Route::post('/uploadImage', [App\Http\Controllers\ArticleController::class, 'uploadImage'])->name('uploadImage');
+    
     //ruta para actualizar el articulo
     Route::put('/articles/{article}', [App\Http\Controllers\ArticleController::class, 'update'])->name('articles.update');
     //ruta para eliminar el articulo
@@ -69,9 +73,6 @@ Route::middleware([
     //Ruta para mostrar una preview de la plantilla
     Route::get('/templates/{template}/preview', [App\Http\Controllers\ArticleUploadController::class, 'showPreview'])->name('templates.show-preview');
 
-
-
-    
 
 
         

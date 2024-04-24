@@ -443,4 +443,30 @@ class ArticleController extends Controller
 
         return redirect()->route('dashboard');
     }
+
+        
+        // Función para subir una imagen
+        public function uploadImage(Request $request)
+        {
+            // Validar los datos del formulario
+            $request->validate([
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
+
+            // Guardar la imagen en la carpeta public/images
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+
+            
+            // Redirigir con la ruta de la imagen
+            return response()->json([
+                'success' => 1,
+                'file' => [
+                    'url' => asset('images/' . $imageName),
+                ]            
+            ]);
+
+
+        }
+
 }

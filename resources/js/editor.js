@@ -1,5 +1,8 @@
 import EditorJS from "@editorjs/editorjs";
 import Header from '@editorjs/header'; 
+import List from '@editorjs/list';
+import CodeTool from '@editorjs/code';
+import ImageTool from '@editorjs/image';
 
 
 window.addEventListener("DOMContentLoaded", (event) => {
@@ -30,7 +33,23 @@ window.addEventListener("DOMContentLoaded", (event) => {
                     levels: [1, 2, 3],
                     defaultLevel: 1
                 }
-            }
+            },
+            list: {
+                class: List,
+                inlineToolbar: true,
+                config: {
+                  defaultStyle: 'unordered'
+                }
+            }, 
+            code: CodeTool,
+            image: {
+                class: ImageTool,
+                config: {
+                  endpoints: {
+                    byFile: 'http://127.0.0.1:8000/uploadImage', // Your backend file uploader endpoint
+                  }
+                }
+            },
         }
     });
 
