@@ -15,11 +15,13 @@ use function Ramsey\Uuid\v1;
 
 class ArticleUploadController extends Controller
 {
+    // Constructor para proteger las rutas
     public function __construct()
     {
         $this->middleware('auth');
     }
     
+    // Función para mostrar todas las plantillas
     public function index()
     {
         // leer todas las plantillas de la base de datos y mostrarlas en la vista upload-template
@@ -33,6 +35,7 @@ class ArticleUploadController extends Controller
         return view('upload-template', ['templates' => $templates]);
     }
 
+    // Función para subir una plantilla
     public function store(Request $request)
     {
         // Validaciones
@@ -88,9 +91,6 @@ class ArticleUploadController extends Controller
             }
         }
 
-        // Compilar el archivo .tex más grande  en windows
-        // $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=storage/files/" . pathinfo($template->file, PATHINFO_FILENAME), $heaviestFile]);
-       
         // ejecutar el comando pdflatex para compilar el archivo .tex en linux
         $process = new Process(['/usr/bin/pdflatex', "-output-directory=storage/files/" . pathinfo($template->file, PATHINFO_FILENAME), $heaviestFile]);
 
@@ -109,10 +109,9 @@ class ArticleUploadController extends Controller
         }
 
         return redirect()->route('templates')->with('success', 'Plantilla subida correctamente.');
-
-
     }
 
+    // Función para previsualizar una plantilla
     public function preview(Template $template)
     {
         // Ruta donde se extraen los archivos
@@ -135,16 +134,12 @@ class ArticleUploadController extends Controller
             }
         }
 
-        // Compilar el archivo .tex más grande en windows
-        // $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=storage/files/" . pathinfo($template->file, PATHINFO_FILENAME), $heaviestFile]);
-       
         // ejecutar el comando pdflatex para compilar el archivo .tex en linux
         $process = new Process(['/usr/bin/pdflatex', "-output-directory=storage/files/" . pathinfo($template->file, PATHINFO_FILENAME), $heaviestFile]);
         $process->run();
 
         if ($process->isSuccessful()) {
             $pdfPath = storage_path('app/public/files/' . pathinfo($template->file, PATHINFO_FILENAME) . '/' . pathinfo($heaviestFile, PATHINFO_FILENAME) . '.pdf');
-            // return response()->download($pdfPath)->deleteFileAfterSend();
 
             // Obtener el nombre del archivo PDF generado
             $pdfFileName = pathinfo($pdfPath, PATHINFO_BASENAME);
@@ -164,12 +159,11 @@ class ArticleUploadController extends Controller
 
         } else {
             return redirect()->route('templates')->with('error', 'No se pudo generar el PDF.');
-            // return redirect('tasks')->with('success', 'Task Created Successfully!');
-
         }
     }
 
 
+    // Función para borrar una plantilla
     public function destroy(Template $template)
     {
         // Delete the zip file
@@ -185,6 +179,3 @@ class ArticleUploadController extends Controller
     }
 
 }
-
-
-// $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=templates_public/{$article->id}", $output_file]);

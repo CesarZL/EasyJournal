@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('abstract')->nullable();
             $table->text('content')->nullable();
             $table->text('keywords')->nullable();
+            $table->text('bib')->nullable();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
 
             $table->timestamps();

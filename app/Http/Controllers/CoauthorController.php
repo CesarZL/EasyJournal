@@ -9,11 +9,13 @@ use App\Models\Coauthor;
 class CoauthorController extends Controller
 {
 
+    // Función para proteger las rutas
     public function __construct()
     {
         $this->middleware('auth');
     }
     
+    // Función para mostrar todos los coautores
     public function index()
     {
         // traer todos los coautores del usuario logueado
@@ -26,6 +28,7 @@ class CoauthorController extends Controller
         return view('coauthors')->with('coauthors', $coauthors);
     }
 
+    // Función para guardar un coautor
     public function store(Request $request)
     {
         //validaciones
@@ -65,6 +68,7 @@ class CoauthorController extends Controller
         return redirect()->route('coauthors')->with('success', 'Coauthor creado correctamente');
     }
 
+    // Función para mostrar la vista de edición de un coautor
     public function edit(Coauthor $coauthor)
     {
         $coauthors = Coauthor::where('created_by', auth()->user()->id)->get();
@@ -73,6 +77,7 @@ class CoauthorController extends Controller
         return view('edit-coauthors', ['coauthor' => $coauthor], ['coauthors' => $coauthors]);
     }
 
+    // Función para actualizar un coautor
     public function update(Request $request, Coauthor $coauthor)
     {
         //validaciones
@@ -110,6 +115,7 @@ class CoauthorController extends Controller
         return redirect()->route('coauthors')->with('success', 'Coauthor actualizado correctamente');
     }
 
+    // Función para eliminar un coautor
     public function destroy(Coauthor $coauthor)
     {
         $coauthor->delete();

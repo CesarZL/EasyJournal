@@ -16,6 +16,7 @@ class Article extends Model
         'abstract',
         'keywords',
         'content',
+        'bib',
         'user_id',
     ];
 

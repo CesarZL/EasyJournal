@@ -15,7 +15,7 @@ use Gemini\Laravel\Facades\Gemini;
 class ArticleController extends Controller
 {
 
-    // Middleware para proteger las rutas del controlador
+    // Función para proteger las rutas
     public function __construct()
     {
         $this->middleware('auth');
@@ -51,9 +51,6 @@ class ArticleController extends Controller
 
         // Redirige al dashboard después de crear un nuevo artículo
         return redirect()->route('dashboard')->with('success', 'Artículo creado correctamente.');
-
-        // return redirect()->route('templates')->with('success', 'Plantilla subida correctamente.');
-
     }
 
     // Función para mostrar la vista de edición de un artículo
@@ -64,12 +61,12 @@ class ArticleController extends Controller
 
         //pasa los datos de las templates a la vista, esto para ver en el select las plantillas que tiene el usuario
         $templates = Template::where('user_id', auth()->user()->id)->get();
-        
-        // Retorna la vista 'edit-article' con los datos del artículo 
+
+        // Retorna la vista 'edit-article' con los datos del artículo
         return view('edit-article', compact('article', 'content', 'templates'));
-        
+
     }
-    
+
     // Función para actualizar un artículo y renderizar el pdf con el contenido actualizado
     public function update(Request $request, Article $article)
     {
@@ -88,8 +85,41 @@ class ArticleController extends Controller
 
         // Parsear el contenido del artículo
         $parsed_content = json_decode($article->content, true);
-                
-        // darle formato de \section al header, \subsection al header de otro nivel y \subsubsection al header de otro nivel y cada parrafo se le da formato será el contenido de su respectivo header
+
+        // Función para generar contenido LaTeX de lista
+        function generateListTeX($items, $style) {
+            $tex_content = "\\begin{itemize}\n";
+            foreach ($items as $item) {
+                $tex_content .= "\\item " . $item . "\n";
+            }
+            $tex_content .= "\\end{itemize}\n";
+            return $tex_content;
+        }
+
+        // Función para generar contenido LaTeX de imagen
+        function generateImageTeX($url, $caption, $article) {
+            // obtener el nombre de la imagen de la url
+            $url = explode("/", $url);
+            $url = end($url);
+
+            // copiar la imagen a la carpeta templates_public/id con el mismo nombre
+            File::copy(public_path("images/{$url}"), public_path("templates_public/{$article->id}/{$url}"));
+
+            // generar el contenido LaTeX de la imagen
+            $tex_content = "\\begin{figure}[h]\n";
+            $tex_content .= "\\centering\n";
+            $tex_content .= "\\includegraphics[width=0.5\\textwidth]{" . $url . "}\n";
+            $tex_content .= "\\caption{" . $caption . "}\n";
+            $tex_content .= "\\end{figure}\n";
+            return $tex_content;
+        }
+
+        // Función para generar contenido LaTeX de tabla
+        function generateTableTeX($code) {
+            return $code; // Devolver el código sin modificaciones
+        }
+
+        // Generar contenido LaTeX
         $my_tex_content = '';
         foreach ($parsed_content['blocks'] as $block) {
             if ($block['type'] == 'header') {
@@ -101,9 +131,18 @@ class ArticleController extends Controller
                     $my_tex_content .= "\\subsubsection{" . $block['data']['text'] . "}\n";
                 }
             } elseif ($block['type'] == 'paragraph') {
-                $my_tex_content .= $block['data']['text'] . "\n";
+                $my_tex_content .= $block['data']['text'] . "\\newline\n";
+            } elseif ($block['type'] == 'list') {
+                $my_tex_content .= generateListTeX($block['data']['items'], $block['data']['style']);
+            } elseif ($block['type'] == 'image') {
+                $my_tex_content .= generateImageTeX($block['data']['file']['url'], $block['data']['caption'], $article);
+            }elseif ($block['type'] == 'code') {
+                $my_tex_content .= generateTableTeX($block['data']['code']);
             }
         }
+
+        //reemplazar cualquier  2&nbsp; por espacio en blanco
+        $my_tex_content = str_replace("2&nbsp;", " ", $my_tex_content);
 
         // si no se selecciona una plantilla se crea una plantilla por defecto
         if($request->template == null){
@@ -115,6 +154,8 @@ class ArticleController extends Controller
                 $tex_content .= "\\usepackage{longtable}\n";
                 $tex_content .= "\\usepackage{graphicx}\n";
                 $tex_content .= "\\usepackage{subfig}\n";
+                $tex_content .= "\\usepackage[backend=biber]{biblatex}\n";
+                $tex_content .= "\\addbibresource{References.bib}\n";
                 $tex_content .= "\\date{}\n";
                 $tex_content .= "\\setcounter{Maxaffil}{0}\n";
                 $tex_content .= "\\renewcommand\\Affilfont{\\itshape\\small}\n";
@@ -148,31 +189,44 @@ class ArticleController extends Controller
                 $tex_content .= "\\end{abstract}\n";
                 $tex_content .= "\\keywords{" . $article->keywords . "}\n";
                 $tex_content .= $my_tex_content . "\n";
+                $tex_content .= "\\printbibliography\n";
                 $tex_content .= "\\end{document}\n";
 
                 // crea la carpeta templates_public si no existe
                 if (!File::exists(public_path('templates_public/' . $article->id))) {
                     File::makeDirectory(public_path('templates_public/' . $article->id), 0777, true);
-                }else{
-                    // borrar todo dentro de la carpeta
-                    File::cleanDirectory(public_path('templates_public/' . $article->id));
                 }
 
                 // crea el archivo tex
                 File::put(public_path('templates_public/' . $article->id . '/' . $article->id . '.tex'), $tex_content);
 
-                // ejecutar el comando pdflatex para compilar el archivo .tex en windows
-                // $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=templates_public/{$article->id}", public_path('templates_public/' . $article->id . '/' . $article->id . '.tex')]);
-                
-                // ejecutar el comando pdflatex para compilar el archivo .tex en linux
-                $process = new Process(['/usr/bin/pdflatex', "-output-directory=templates_public/{$article->id}", public_path('templates_public/' . $article->id . '/' . $article->id . '.tex')]);
+                //crear el archivo bib con el contenido del campo bib 
+                File::put(public_path('templates_public/' . $article->id . '/' . 'References.bib'), $article->bib);
 
+                // compilar el archivo tex 
+                $process = new Process(['/usr/bin/pdflatex', "-output-directory=templates_public/{$article->id}", public_path('templates_public/' . $article->id . '/' . $article->id . '.tex')]);
                 $process->run();
 
-                // verificar si hubo un error al compilar el archivo .tex
-                if (!$process->isSuccessful()) {
+                // compilar el archivo bib
+                $process2 = new Process(['/usr/bin/biber', public_path('templates_public/' . $article->id . '/' . $article->id)]);
+                $process2->run();
+
+                // compilar el archivo tex
+                $process3 = new Process(['/usr/bin/pdflatex', "-output-directory=templates_public/{$article->id}", public_path('templates_public/' . $article->id . '/' . $article->id . '.tex')]);
+                $process3->run();
+
+                // compilar el archivo tex
+                $process4 = new Process(['/usr/bin/pdflatex', "-output-directory=templates_public/{$article->id}", public_path('templates_public/' . $article->id . '/' . $article->id . '.tex')]);
+                $process4->run();
+                        
+                // si alguno de los 4 procesos falla se regresa a la vista con un mensaje de error
+                if (!$process->isSuccessful() || !$process2->isSuccessful() || !$process3->isSuccessful() || !$process4->isSuccessful()) {
                     // Esto se tiene que cambiar por un mensaje de error en la vista
-                    throw new ProcessFailedException($process);
+                    // throw new ProcessFailedException($process);
+
+                    // borrar todo dentro de la carpeta y regresar a la vista con un mensaje de error
+                    File::cleanDirectory(public_path('templates_public/' . $article->id));
+                    return redirect()->route('articles.edit', $article->id)->with('error', 'No se pudo generar el PDF de este artículo.');
                 }
 
                 // obtener la url del pdf generado
@@ -182,19 +236,15 @@ class ArticleController extends Controller
                 return redirect()->route('articles.edit', $article->id)->with('pdf_url', $pdf_url);
         }
         else{
-
-            // busca la plantilla seleccionada 
+            // busca la plantilla seleccionada
             $template = Template::find($request->template);
             $template_path = $template->file;
 
             // crea la carpeta templates_public si no existe
             if (!File::exists(public_path('templates_public/' . $article->id))) {
                 File::makeDirectory(public_path('templates_public/' . $article->id), 0777, true);
-            }else{
-                // borrar todo dentro de la carpeta
-                File::cleanDirectory(public_path('templates_public/' . $article->id));
             }
-            
+
             // extraer el contenido de la plantilla seleccionada
             $zip = new ZipArchive;
             if ($zip->open(storage_path('app/' . $template_path)) === TRUE) {
@@ -220,7 +270,7 @@ class ArticleController extends Controller
             // renombrar el archivo .tex con el id del artículo
             $new_file_name = public_path('templates_public/' . $article->id . '/' . $article->id . '.tex');
             rename($largestFile, $new_file_name);
-            
+
             // función para eliminar comentarios y secciones innecesarias del archivo .tex
             function remove_tex_comments($input_file, $output_file, $sections)
             {
@@ -280,11 +330,11 @@ class ArticleController extends Controller
                 for ($i = 0; $i < count($article->coauthors); $i++) {
                     $prompt .= "Name: " . $article->coauthors[$i]->name . " " . $article->coauthors[$i]->father_surname . " " . $article->coauthors[$i]->mother_surname . "\nORCID: " . $article->coauthors[$i]->orcid . "\nAffiliation: " . $article->coauthors[$i]->affiliation . "\nInstitution: " . $article->coauthors[$i]->institution . "\nEmail: " . $article->coauthors[$i]->email . "\n\n";
                 }
-                $prompt .= "\n\nAfter you fill the author information, you're going to give me the updated latex file ready to compile without any explanation, just the code. The latex without the author information is in the file " . $tex_content . ".\n\n";    
+                $prompt .= "\n\nAfter you fill the author information, you're going to give me the updated latex file ready to compile without any explanation, just the code. The latex without the author information is in the file " . $tex_content . ".\n\n";
 
             } else {
                 $prompt = "Your purpose is to fill in sections of latex files with the information I will provide you, first, you are going to fill the author information and all those information that is needed, if you don't have the information, you must leave it blank, if you have extra data from the author but isnt requiere in the template you must leave it blank, if there is just one author you must have only one affiliation and institution. In this case there is just one author and you must delete other dummy author or coauthor in the latex file and put only the author that i am given to you. You are going to fill that information with this data: \n\nThis is the principal author information: \n\nName: " . (auth()->user()->name ? auth()->user()->name . " " : "") . (auth()->user()->father_surname ? auth()->user()->father_surname . " " : "") . (auth()->user()->mother_surname ? auth()->user()->mother_surname : "") . "\nORCID: " . (auth()->user()->orcid ? auth()->user()->orcid : "") . "\nAffiliation: " . (auth()->user()->affiliation ? auth()->user()->affiliation : "") . "\nInstitution: " . (auth()->user()->institution ? auth()->user()->institution : "") . "\nEmail: " . (auth()->user()->email ? auth()->user()->email : "");
-                $prompt .= "\n\nAfter you fill the author information, you're going to give me the updated latex file ready to compile without any explanation, just the code. The latex without the author information is in the file " . $tex_content . ".\n\n";    
+                $prompt .= "\n\nAfter you fill the author information, you're going to give me the updated latex file ready to compile without any explanation, just the code. The latex without the author information is in the file " . $tex_content . ".\n\n";
             }
 
             // $prompt = "Your purpose is to fill in sections of latex files with the information I will provide you, first, you are going to fill the author information, coauthors and affiliations and all those information that is needed, if you don't have the information, you must leave it blank, if you have extra data from the author or coauthors but isnt requiere in the template you must leave it blank, if the authors or coauthors share the same affiliation and institution then they can share the same number of affiliation and institution, if they don't share the same affiliation and institution then they need to have different numbers of affiliation and institution. You are going to fill that information with this data: \n\nThis is the principal author information: \n\nName: " . (auth()->user()->name ? auth()->user()->name . " " : "") . (auth()->user()->father_surname ? auth()->user()->father_surname . " " : "") . (auth()->user()->mother_surname ? auth()->user()->mother_surname : "") . "\nORCID: " . (auth()->user()->orcid ? auth()->user()->orcid : "") . "\nAffiliation: " . (auth()->user()->affiliation ? auth()->user()->affiliation : "") . "\nInstitution: " . (auth()->user()->institution ? auth()->user()->institution : "") . "\nEmail: " . (auth()->user()->email ? auth()->user()->email : "") . "\n\nAnd this is the coauthors information: \n\n";
@@ -325,19 +375,19 @@ class ArticleController extends Controller
 
             // busca la sección SECTIONBASE y la reemplaza por el contenido del artículo
             $tex_content = preg_replace('/(\\\\section\{SECTIONBASE\})/', $my_tex_content, $tex_content);
-            
+
             // guardando el contenido del articulo en un archivo .tex
-            file_put_contents($output_file, $tex_content);            
+            file_put_contents($output_file, $tex_content);
 
             // compilar el archivo .tex con -interaction=nonstopmode para que no se detenga en caso de error
             // $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-output-directory=templates_public/{$article->id}", $output_file]);
 
             // compilar el archivo .tex con -interaction=nonstopmode en windows
             // $process = new Process(['C:\Users\cesar\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe', "-interaction=nonstopmode", "-output-directory=templates_public/{$article->id}", $output_file]);
-            
+
             // ejecutar el comando pdflatex para compilar el archivo .tex en linux
             $process = new Process(['/usr/bin/pdflatex', "-output-directory=templates_public/{$article->id}", $output_file]);
-            
+
             $process->run();
 
             // verificar si hubo un error al compilar el archivo .tex
@@ -360,9 +410,6 @@ class ArticleController extends Controller
     // Función para descargar el pdf de un artículo
     public function pdf(Article $article)
     {
-        // obtener la url del pdf generado
-        $pdf_url = asset("templates_public/{$article->id}/{$article->id}.pdf");
-
         // descargar el pdf
         return response()->download(public_path("templates_public/{$article->id}/{$article->id}.pdf"));
     }
@@ -370,11 +417,16 @@ class ArticleController extends Controller
     // Función para descargar el zip de un artículo
     public function zip(Article $article)
     {
+        //crea la carpeta templates_zip si no existe y si existe borra su contenido
+        if (!File::exists(public_path('templates_zip'))) {
+            File::makeDirectory(public_path('templates_zip'), 0777, true);
+        } else {
+            File::cleanDirectory(public_path('templates_zip'));
+        }
 
-        // crear un nuevo archivo zip con todo el contenido de la carpeta del artículo
-        $zip_file = public_path("templates_public/{$article->id}/{$article->id}.zip");
+        // crea el archivo zip
         $zip = new ZipArchive;
-        $zip->open($zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        $zip->open(public_path("templates_zip/{$article->id}.zip"), ZipArchive::CREATE | ZipArchive::OVERWRITE);
         $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(public_path("templates_public/{$article->id}")), \RecursiveIteratorIterator::LEAVES_ONLY);
 
         foreach ($files as $name => $file) {
@@ -392,7 +444,7 @@ class ArticleController extends Controller
         $zip->close();
 
         // descargar el archivo zip
-        return response()->download($zip_file);
+        return response()->download(public_path("templates_zip/{$article->id}.zip"));
     }
 
     // Función para mostrar la vista de edición de detalles de un artículo
@@ -419,17 +471,16 @@ class ArticleController extends Controller
 
         // Actualiza el título del artículo
         $article->title = $request->title;
+        $article->bib = $request->bib;
         $article->save();
 
         // Actualiza los coautores del artículo
         $article->coauthors()->sync($request->coauthors);
 
-
         // Redirige de vuelta a la página de detalles del artículo
         return redirect()->route('articles.edit', $article->id)->with('success', 'Detalles actualizados correctamente.');
-        
     }
-    
+
     // Función para eliminar un artículo de la base de datos
     public function destroy($id)
     {
@@ -444,29 +495,26 @@ class ArticleController extends Controller
         return redirect()->route('dashboard');
     }
 
-        
-        // Función para subir una imagen
-        public function uploadImage(Request $request)
-        {
-            // Validar los datos del formulario
-            $request->validate([
-                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            ]);
 
-            // Guardar la imagen en la carpeta public/images
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('images'), $imageName);
+    // Función para subir una imagen
+    public function uploadImage(Request $request)
+    {
+        // Validar los datos del formulario
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
 
-            
-            // Redirigir con la ruta de la imagen
-            return response()->json([
-                'success' => 1,
-                'file' => [
-                    'url' => asset('images/' . $imageName),
-                ]            
-            ]);
+        // Guardar la imagen en la carpeta public/images
+        $imageName = time() . '.' . $request->image->extension();
+        $request->image->move(public_path('images'), $imageName);
 
-
-        }
+        // Redirigir con la ruta de la imagen
+        return response()->json([
+            'success' => 1,
+            'file' => [
+                'url' => asset('images/' . $imageName),
+            ]
+        ]);
+    }
 
 }
