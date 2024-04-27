@@ -12,6 +12,8 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 use Illuminate\Support\Str;
 
 
+
+
 use function Ramsey\Uuid\v1;
 
 class ArticleUploadController extends Controller
@@ -71,7 +73,15 @@ class ArticleUploadController extends Controller
         $texFiles = glob($extractPath . '/*.tex');
         if (empty($texFiles)) {
             return redirect()->route('templates')->with('error', 'No se encontró ningún archivo .tex en el archivo ZIP.');
+        }else{
+            // $template = new Template;
+            // $template->name = $request->name;
+            // $template->description = $request->description;
+            // $template->file = $zipPath;
+            // $template->user_id = auth()->user()->id;
+            // $template->save();
         }
+
 
         // Abrir el archivo tex más grande y mostrar el pdf generado
         $heaviestFile = '';
@@ -87,14 +97,6 @@ class ArticleUploadController extends Controller
                     $heaviestFile = $filePath;
                     $heaviestSize = $fileSize;
                 }
-            }
-        }
-
-        // buscar si hay un pdf con el mismo nombre que el archivo tex más grande, si lo hay, eliminarlo
-        $pdfFiles = glob($extractPath . '/*.pdf');
-        foreach ($pdfFiles as $pdfFile) {
-            if (pathinfo($pdfFile, PATHINFO_FILENAME) === pathinfo($heaviestFile, PATHINFO_FILENAME)) {
-                unlink($pdfFile);
             }
         }
         
@@ -164,24 +166,28 @@ class ArticleUploadController extends Controller
             ];
         }
         
-        // Se llama a la función recursiva para obtener todos los archivos dentro del directorio de extracción y sus subdirectorios
+        // Usar la función recursiva para obtener todos los archivos dentro del directorio de extracción, excluyendo el archivo más grande
         $results = getFilesRecursively($extractPath, null, null, $heaviestFile);
         
-        // se quita la extensión de todos los nombres originales
+        // quitar la extensión de todos los nombres originales, simplemte se quita todo despues del punto Ej. cambiar Definitions/chicago2.bst por Definitions/chicago2
         for ($i = 0; $i < count($results['originalNames']); $i++) {
+            // // original name
             $originalName = $results['originalNames'][$i];
             $originalName = explode('.', $originalName)[0];
+
             $results['originalNames'][$i] = $originalName;
         }
 
-        // se quita la extensión de todos los nombres renombrados
+        // quitar la extensión de todos los nombres nuevos, simplemte se quita todo despues del punto Ej. cambiar Definitions/chicago2.bst por Definitions/chicago2
         for ($i = 0; $i < count($results['renamedFiles']); $i++) {
+            // // original name
             $renamedFile = $results['renamedFiles'][$i];
             $renamedFile = explode('.', $renamedFile)[0];
+
             $results['renamedFiles'][$i] = $renamedFile;
         }
 
-        // leer contenido del archivo tex más grande
+        // // leer contenido del archivo tex más grande
         $content = file_get_contents($heaviestFile);
     
         // buscar y reemplazar cada referencia a los archivos extraídos con todo y path del directorio que los contiene por los nuevos nombres en el tex más grande
@@ -198,12 +204,19 @@ class ArticleUploadController extends Controller
             // leer contenido del archivo cls
             $content = file_get_contents($clsFile);
         
+            // buscar y reemplazar cada referencia a los archivos extraídos con todo y path del directorio que los contiene por los nuevos nombres en el tex más grande
+            // for ($i = 0; $i < count($results['originalNames']); $i++) {
+            //     $content = str_replace($results['originalNames'][$i], $results['renamedFiles'][$i], $content);
+            // }
+
+
             // buscar sin importar mayúsculas y minúsculas
             for ($i = 0; $i < count($results['originalNames']); $i++) {
-                // $content = preg_replace('/\b' . $results['originalNames'][$i] . '\b/i', $results['renamedFiles'][$i], $content); 
+                                // $content = preg_replace('/\b' . $results['originalNames'][$i] . '\b/i', $results['renamedFiles'][$i], $content); 
                 $content = preg_replace('/\b' . preg_quote($results['originalNames'][$i], '/') . '\b/i', $results['renamedFiles'][$i], $content);  
+
             }
-        
+            
             // guardar el contenido modificado en el archivo cls
             file_put_contents($clsFile, $content);
         }
@@ -214,9 +227,14 @@ class ArticleUploadController extends Controller
             // leer contenido del archivo bib
             $content = file_get_contents($bibFile);
         
+            // buscar y reemplazar cada referencia a los archivos extraídos con todo y path del directorio que los contiene por los nuevos nombres en el tex más grande
+            // for ($i = 0; $i < count($results['originalNames']); $i++) {
+            //     $content = str_replace($results['originalNames'][$i], $results['renamedFiles'][$i], $content);
+            // }
+
             // buscar sin importar mayúsculas y minúsculas
             for ($i = 0; $i < count($results['originalNames']); $i++) {
-                // $content = preg_replace('/\b' . $results['originalNames'][$i] . '\b/i', $results['renamedFiles'][$i], $content); 
+                                // $content = preg_replace('/\b' . $results['originalNames'][$i] . '\b/i', $results['renamedFiles'][$i], $content); 
                 $content = preg_replace('/\b' . preg_quote($results['originalNames'][$i], '/') . '\b/i', $results['renamedFiles'][$i], $content); 
             }
             
@@ -229,10 +247,15 @@ class ArticleUploadController extends Controller
         foreach ($bstFiles as $bstFile) {
             // leer contenido del archivo bst
             $content = file_get_contents($bstFile);
+        
+            // buscar y reemplazar cada referencia a los archivos extraídos con todo y path del directorio que los contiene por los nuevos nombres en el tex más grande
+            // for ($i = 0; $i < count($results['originalNames']); $i++) {
+            //     $content = str_replace($results['originalNames'][$i], $results['renamedFiles'][$i], $content);
+            // }
 
             // buscar sin importar mayúsculas y minúsculas
             for ($i = 0; $i < count($results['originalNames']); $i++) {
-                // $content = preg_replace('/\b' . $results['originalNames'][$i] . '\b/i', $results['renamedFiles'][$i], $content); 
+                                // $content = preg_replace('/\b' . $results['originalNames'][$i] . '\b/i', $results['renamedFiles'][$i], $content); 
                 $content = preg_replace('/\b' . preg_quote($results['originalNames'][$i], '/') . '\b/i', $results['renamedFiles'][$i], $content); 
             }
             
@@ -245,10 +268,15 @@ class ArticleUploadController extends Controller
         foreach ($styFiles as $styFile) {
             // leer contenido del archivo sty
             $content = file_get_contents($styFile);
+        
+            // buscar y reemplazar cada referencia a los archivos extraídos con todo y path del directorio que los contiene por los nuevos nombres en el tex más grande
+            // for ($i = 0; $i < count($results['originalNames']); $i++) {
+            //     $content = str_replace($results['originalNames'][$i], $results['renamedFiles'][$i], $content);
+            // }
 
             // buscar sin importar mayúsculas y minúsculas
             for ($i = 0; $i < count($results['originalNames']); $i++) {
-                // $content = preg_replace('/\b' . $results['originalNames'][$i] . '\b/i', $results['renamedFiles'][$i], $content); 
+                                // $content = preg_replace('/\b' . $results['originalNames'][$i] . '\b/i', $results['renamedFiles'][$i], $content); 
                 $content = preg_replace('/\b' . preg_quote($results['originalNames'][$i], '/') . '\b/i', $results['renamedFiles'][$i], $content); 
             }
             
@@ -260,17 +288,9 @@ class ArticleUploadController extends Controller
         $script = "#!/bin/bash\n\n";
         $script .= "OUTDIR=" . $extractPath . "\n";
         $script .= "FILENAME=" . pathinfo($heaviestFile, PATHINFO_FILENAME) . "\n";
-        $script .= "OPTIONS=\"-shell-escape -interaction=nonstopmode\"\n\n";
+        $script .= "OPTIONS=\"-interaction=nonstopmode\"\n\n";
         $script .= "mkdir -p \$OUTDIR\n\n";
         $script .= "/usr/bin/pdflatex \$OPTIONS --output-directory=\$OUTDIR \$FILENAME.tex\n";
-
-        // si existen eps en el directorio, convertirlos a pdf y guardarlos con el nombre-to-pdf. Ej. nombreoriginal.eps -> nombreoriginal-eps-converted-to.pdf
-        $epsFiles = glob($extractPath . '/*.eps');
-        foreach ($epsFiles as $epsFile) {
-            $epsFileName = pathinfo($epsFile, PATHINFO_FILENAME);
-            $epsToPdfFile = $extractPath . '/' . $epsFileName . '-eps-converted-to.pdf';
-            $script .= "/usr/bin/epstopdf $epsFile --outfile=$epsToPdfFile\n";
-        }
 
         // Guardar el script en un archivo .sh
         $scriptPath = storage_path('app/public/files/' . pathinfo($zipPath, PATHINFO_FILENAME) . '/compile.sh');
@@ -280,22 +300,21 @@ class ArticleUploadController extends Controller
         $process = new Process(['sh', $scriptPath]);
         $process->run();
 
-        // Verificar si se generó el archivo PDF
-        $pdfPath = $extractPath . '/' . pathinfo($heaviestFile, PATHINFO_FILENAME) . '.pdf';
-        if (file_exists($pdfPath)) {
-            // Crear y almacenar el objeto Template
-            $template = new Template;
-            $template->name = $request->name;
-            $template->description = $request->description;
-            $template->file = $zipPath;
-            $template->user_id = auth()->user()->id;
-            $template->save();
-
-            return redirect()->route('templates')->with('success', 'Plantilla subida correctamente.');
-        } else {
-            // Si el archivo PDF no se generó, mostrar un mensaje de error
-            return redirect()->route('templates')->with('error', 'El archivo PDF no se generó correctamente.');
+        // Si el proceso falla, redirige con un mensaje de error
+        if (!$process->isSuccessful()) {
+            return redirect()->route('templates')->with('error', 'No se pudo compilar el archivo .tex más grande.');
         }
+
+        
+        
+
+
+
+
+
+
+
+
     }
 
     // Función para previsualizar una plantilla
@@ -328,9 +347,9 @@ class ArticleUploadController extends Controller
         $script .= "OPTIONS=\"-interaction=nonstopmode\"\n\n";
         $script .= "mkdir -p \$OUTDIR\n\n";
         $script .= "/usr/bin/pdflatex \$OPTIONS --output-directory=\$OUTDIR \$FILENAME.tex\n";
-        // $script .= "/usr/bin/biber --output-directory=\$OUTDIR \$FILENAME\n";
-        // $script .= "/usr/bin/pdflatex \$OPTIONS --output-directory=\$OUTDIR \$FILENAME.tex\n";
-        // $script .= "/usr/bin/pdflatex \$OPTIONS --output-directory=\$OUTDIR \$FILENAME.tex\n";
+        $script .= "/usr/bin/biber --output-directory=\$OUTDIR \$FILENAME\n";
+        $script .= "/usr/bin/pdflatex \$OPTIONS --output-directory=\$OUTDIR \$FILENAME.tex\n";
+        $script .= "/usr/bin/pdflatex \$OPTIONS --output-directory=\$OUTDIR \$FILENAME.tex\n";
 
         // Guardar el script en un archivo .sh
         $scriptPath = storage_path('app/public/files/' . pathinfo($template->file, PATHINFO_FILENAME) . '/compile.sh');

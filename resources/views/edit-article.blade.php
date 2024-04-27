@@ -6,7 +6,7 @@
         <div class="flex items-center">
 
             {{-- Si existe el PDF, mostrar botón para descargarlo --}}
-            @if (file_exists(public_path('templates_public/' . $article->id . '/' . $article->id . '.pdf')))
+            @if (file_exists(public_path('articles_public/' . $article->id . '/' . $article->id . '.pdf')))
                 <a href="{{route('articles.pdf', $article)}}" class="ml-2 flex-shrink-0 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600 cursor-pointer">
                     Descargar pdf
                 </a>
@@ -78,9 +78,9 @@
         <!-- Columna derecha -->
         <div class="flex-1">
             <div class="rounded-lg bg-red-50 dark:bg-gray-700 h-screen">
-                    @if (file_exists(public_path('templates_public/' . $article->id . '/' . $article->id . '.pdf')))
+                    @if (file_exists(public_path('articles_public/' . $article->id . '/' . $article->id . '.pdf')))
                     {{-- Si el PDF existe, mostrarlo --}}
-                    <embed class="rounded-lg" id="pdf-embed" type="application/pdf" width="100%" height="100%" src="{{ asset('templates_public/' . $article->id . '/' . $article->id . '.pdf') }}" />
+                    <embed class="rounded-lg" id="pdf-embed" type="application/pdf" width="100%" height="100%" src="{{ asset('articles_public/' . $article->id . '/' . $article->id . '.pdf') }}" />
                     @else
                         {{-- Si el PDF no existe, mostrar mensaje --}}
                         <div class="flex items-center justify-center h-full">

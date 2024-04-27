@@ -5,6 +5,15 @@
         <!-- Columna izquierda -->
         <div class="flex-1 xl:pe-3 py-3 xl:py-0">
             <div class="p-5 rounded-lg bg-gray-50 dark:bg-gray-800 overflow-y-auto h-screen"> 
+
+                {{-- si no hay plantillas se muestra el mismo diseño pero sin botones y diciendo que no hay plantillas --}}
+                @if ($templates->isEmpty())
+                    <div class="dark:bg-white bg-white p-4 rounded-lg dark:hover:bg-gray-100 hover:bg-gray-100">
+                        <h2 class="text-xl font-bold mb-2">No hay plantillas</h2>
+                        <p class="text-gray-700">No has subido ninguna plantilla aún.</p>
+                    </div>
+                @endif
+
                 @foreach ($templates as $template)
                     
                     <div class="dark:bg-white bg-white p-4 rounded-lg dark:hover:bg-gray-100 hover:bg-gray-100 @if ($loop->first) mt-0 @else mt-4 @endif">
