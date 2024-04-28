@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('templates', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             //path to the zip file in storage/files/name.zip
             $table->string('file');
             $table->foreignId('user_id')->constrained('users');

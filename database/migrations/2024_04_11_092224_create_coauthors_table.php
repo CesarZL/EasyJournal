@@ -23,11 +23,11 @@ return new class extends Migration
             $table->string('institution');
             $table->string('affiliation')->nullable();
             $table->string('orcid')->unique();
-            $table->text('biography')->nullable();
-            $table->string('photo')->nullable();
-            $table->string('scopus_id')->nullable();
-            $table->string('researcher_id')->nullable();
-            $table->string('url')->nullable();
+            // $table->text('biography')->nullable();
+            // $table->string('photo')->nullable();
+            // $table->string('scopus_id')->nullable();
+            // $table->string('researcher_id')->nullable();
+            // $table->string('url')->nullable();
             $table->string('affiliation_url')->nullable();
             $table->timestamps();
             // Foreign key related to the user who created this coauthor

@@ -9,6 +9,6 @@ class Template extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'file', 'user_id'];
+    protected $fillable = ['name', 'file', 'user_id'];
 
 }

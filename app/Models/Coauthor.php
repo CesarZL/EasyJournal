@@ -19,12 +19,12 @@ class Coauthor extends Model
         'institution',
         'country',
         'orcid',
-        'scopus_id',
-        'researcher_id',
-        'url',
+        // 'scopus_id',
+        // 'researcher_id',
+        // 'url',
         'affiliation',
         'affiliation_url',
-        'biography',
+        // 'biography',
         'created_by',
     ];
 

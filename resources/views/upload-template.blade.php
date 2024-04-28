@@ -61,7 +61,7 @@
                     @csrf
 
                     <div class="mb-4">
-                        <label for="name" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Nombre de la plantilla</label>
+                        <x-label-required for="name" :value="__('Nombre de la plantilla')" />
                         <input name="name" id="name" value="{{ old('name') }}" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" type="text"/>
                         @error('name')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -69,7 +69,7 @@
                     </div>
                     
                     <div class="mb-4">
-                        <label for="description" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Descripción de la plantilla</label>
+                        <x-label for="description" :value="__('Descripción de la plantilla')" />
                         <textarea rows="4" name="description" id="description" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">{{ old('description') }}</textarea>
                         @error('description')
                             <span class="text-red-500 text-sm">{{ $message }}</span>

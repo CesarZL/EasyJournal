@@ -118,37 +118,37 @@
                             @enderror
                         </div>
 
-                        <div class="mt-4">
+                        {{-- <div class="mt-4">
                             <x-label for="scopus_id" :value="__('Scopus ID')" />
                             <x-input id="scopus_id" name="scopus_id" type="text" value="{{ old('scopus_id', $coauthor->scopus_id) }}" />
                             @error('scopus_id')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
-                        </div>
+                        </div> --}}
 
-                        <div class="mt-4">
+                        {{-- <div class="mt-4">
                             <x-label for="researcher_id" :value="__('Researcher ID')" />
                             <x-input id="researcher_id" name="researcher_id" type="text" value="{{ old('researcher_id', $coauthor->researcher_id) }}" />
                             @error('researcher_id')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
-                        </div>
+                        </div> --}}
 
-                        <div class="mt-4">
+                        {{-- <div class="mt-4">
                             <x-label for="url" :value="__('URL')" />
                             <x-input id="url" name="url" type="text" value="{{ old('url', $coauthor->url) }}" />
                             @error('url')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
-                        </div>
+                        </div> --}}
 
-                        <div class="col-span-2 mt-4"> <!-- Added col-span-2 class here -->
+                        {{-- <div class="col-span-2 mt-4"> <!-- Added col-span-2 class here -->
                             <x-label for="biography" :value="__('Biografía')" />
                             <textarea rows="5" name="biography" id="biography" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">{{old('biography', $coauthor->biography) }}</textarea>
                             @error('biography')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
-                        </div>
+                        </div> --}}
 
                     </div>
 
