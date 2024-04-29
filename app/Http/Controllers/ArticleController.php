@@ -532,7 +532,7 @@ class ArticleController extends Controller
             function replace_tex_content($file, $my_tex_content, $article)
             {
                 $content = file_get_contents($file);
-                $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\bibliographystyle{plain}' . "\n" . '\bibliography{' . $article->id . '}' . "\n", $content) . "\n";
+                $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\bibliographystyle{plain}' . "\n" . '\bibliography{' . $article->id . '.bib}' . "\n", $content) . "\n";
                 // $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\printbibliography' . "\n", $content);
 
                 file_put_contents($file, $content);
@@ -664,7 +664,7 @@ class ArticleController extends Controller
             $process->run();
 
             // compilar el archivo bib
-            $process2 = new Process(['/usr/bin/bibtex', "-f", public_path('articles_public/' . $article->id . '/' . $article->id)]);
+            $process2 = new Process(['/usr/bin/biber', public_path('articles_public/' . $article->id . '/' . $article->id)]);
             $process2->run();
 
             // compilar el archivo tex
