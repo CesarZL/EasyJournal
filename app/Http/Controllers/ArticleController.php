@@ -142,8 +142,11 @@ class ArticleController extends Controller
             }
         }
 
-        //reemplazar cualquier  2&nbsp; por espacio en blanco
+        // reemplazar cualquier  2&nbsp; por espacio en blanco
         $my_tex_content = str_replace("2&nbsp;", " ", $my_tex_content);
+
+        // reemplazar cualquier  &nbsp; por espacio en blanco
+        $my_tex_content = str_replace("&nbsp;", " ", $my_tex_content);
 
         // si no se selecciona una plantilla se crea una plantilla por defecto
         if($request->template == null){
@@ -519,10 +522,10 @@ class ArticleController extends Controller
                 }
             }
 
-            //reemplazar cualquier  2&nbsp; por espacio en blanco
+            // reemplazar cualquier  2&nbsp; por espacio en blanco
             $my_tex_content = str_replace("2&nbsp;", " ", $my_tex_content);
 
-            // &nbsp
+            // reemplazar cualquier  &nbsp; por espacio en blanco
             $my_tex_content = str_replace("&nbsp;", " ", $my_tex_content);
 
             // borra el \section{FUNDATION} reemplaza directamente por my_tex_content
