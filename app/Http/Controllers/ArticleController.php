@@ -159,7 +159,7 @@ class ArticleController extends Controller
                 $tex_content .= "\\usepackage{graphicx}\n";
                 $tex_content .= "\\usepackage{subfig}\n";
                 $tex_content .= "\\usepackage[backend=biber]{biblatex}\n";
-                $tex_content .= "\\addbibresource{References.bib}\n";
+                $tex_content .= "\\addbibresource{" . $article->id . ".bib}\n";
                 $tex_content .= "\\date{}\n";
                 $tex_content .= "\\setcounter{Maxaffil}{0}\n";
                 $tex_content .= "\\renewcommand\\Affilfont{\\itshape\\small}\n";
@@ -205,7 +205,7 @@ class ArticleController extends Controller
                 File::put(public_path('articles_public/' . $article->id . '/' . $article->id . '.tex'), $tex_content);
 
                 // crear el archivo bib con el contenido del campo bib 
-                File::put(public_path('articles_public/' . $article->id . '/' . 'References.bib'), $article->bib);
+                File::put(public_path('articles_public/' . $article->id . '/' . $article->id . '.bib'), $article->bib);
 
                 // borrar el archivo pdf si existe en la carpeta del artículo
                 if (file_exists(public_path("articles_public/{$article->id}/{$article->id}.pdf"))) {
@@ -529,10 +529,10 @@ class ArticleController extends Controller
             $my_tex_content = str_replace("&nbsp;", " ", $my_tex_content);
 
             // borra el \section{FUNDATION} reemplaza directamente por my_tex_content
-            function replace_tex_content($file, $my_tex_content)
+            function replace_tex_content($file, $my_tex_content, $article)
             {
                 $content = file_get_contents($file);
-                $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\bibliographystyle{plain}' . "\n" . '\bibliography{References.bib}' . "\n", $content);
+                $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\bibliographystyle{plain}' . "\n" . '\bibliography{' . $article->id . '}' . "\n", $content) . "\n";
                 // $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\printbibliography' . "\n", $content);
 
                 file_put_contents($file, $content);
@@ -625,7 +625,7 @@ class ArticleController extends Controller
 
 
             // crear el archivo bib con el contenido del campo bib
-            File::put(public_path('articles_public/' . $article->id . '/' . 'References.bib'), $article->bib);
+            File::put(public_path('articles_public/' . $article->id . '/' . $article->id . '.bib'), $article->bib);
 
             // quitar los comentarios del archivo .tex
             remove_tex_comments($new_file_name); 
@@ -651,7 +651,7 @@ class ArticleController extends Controller
             add_packages($new_file_name);
 
             // sustituir el FUNDATION por el contenido de my_tex_content
-            replace_tex_content($new_file_name, $my_tex_content);
+            replace_tex_content($new_file_name, $my_tex_content, $article);
 
             // sustituir el AQUIVAELABSTRACT por el contenido del abstract
             replace_tex_abstract($new_file_name, $article->abstract);
