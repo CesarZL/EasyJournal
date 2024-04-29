@@ -46,7 +46,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
                 class: ImageTool,
                 config: {
                   endpoints: {
-                    byFile: 'http://127.0.0.1:8000/uploadImage', // Your backend file uploader endpoint
+                    byFile: '/uploadImage', // Your backend file uploader endpoint
                   }
                 }
             },
