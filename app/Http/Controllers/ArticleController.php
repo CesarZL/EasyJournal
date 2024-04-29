@@ -532,7 +532,11 @@ class ArticleController extends Controller
             function replace_tex_content($file, $my_tex_content)
             {
                 $content = file_get_contents($file);
-                $content = str_replace('\section{FUNDATION}', $my_tex_content, $content);
+                // $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\bibliographystyle{numeric}
+                // \bibliography{References}
+
+                $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\bibliographystyle{numeric}' . "\n" . '\bibliography{References.bib}' . "\n", $content);
+
                 file_put_contents($file, $content);
             }
 
@@ -552,7 +556,7 @@ class ArticleController extends Controller
                 file_put_contents($file, $content);
             }
 
-            // Buscar los paquetes caption y graphicx, si no existen, agregarlos antes de \begin{document}
+            // Buscar los paquetes caption, graphicx, biblatex y la referencia a References.bib, si no existen, agregarlos antes de \begin{document}
             function add_packages($file)
             {
                 // Leer el contenido del archivo
@@ -561,9 +565,11 @@ class ArticleController extends Controller
                 // Separar el contenido en líneas
                 $lines = explode("\n", $content);
 
-                // Verificar si ya están presentes los paquetes caption y graphicx
+                // Verificar si ya están presentes los paquetes y la referencia
                 $caption_package_present = false;
                 $graphicx_package_present = false;
+                $biblatex_package_present = false;
+                $bibresource_present = false;
                 foreach ($lines as $line) {
                     if (strpos($line, '\usepackage{caption}') !== false) {
                         $caption_package_present = true;
@@ -571,10 +577,16 @@ class ArticleController extends Controller
                     if (strpos($line, '\usepackage{graphicx}') !== false) {
                         $graphicx_package_present = true;
                     }
+                    // if (strpos($line, '\usepackage[backend=biber]{biblatex}') !== false) {
+                    //     $biblatex_package_present = true;
+                    // }
+                    // if (strpos($line, '\addbibresource{References.bib}') !== false) {
+                    //     $bibresource_present = true;
+                    // }
                 }
 
-                // Si falta alguno de los paquetes, encontrar la posición de \begin{document} y agregar los paquetes faltantes justo antes
-                if (!$caption_package_present || !$graphicx_package_present) {
+                // Si falta alguno de los paquetes o la referencia, encontrar la posición de \begin{document} y agregar los elementos faltantes justo antes
+                if (!$caption_package_present || !$graphicx_package_present || !$biblatex_package_present || !$bibresource_present) {
                     $document_index = array_search('\begin{document}', $lines);
                     if ($document_index !== false) {
                         if (!$caption_package_present) {
@@ -583,7 +595,15 @@ class ArticleController extends Controller
                         }
                         if (!$graphicx_package_present) {
                             array_splice($lines, $document_index, 0, '\usepackage{graphicx}');
+                            $document_index++;
                         }
+                        // if (!$biblatex_package_present) {
+                        //     array_splice($lines, $document_index, 0, '\usepackage[backend=biber]{biblatex}');
+                        //     $document_index++;
+                        // }
+                        // if (!$bibresource_present) {
+                        //     array_splice($lines, $document_index, 0, '\addbibresource{References.bib}');
+                        // }
                     }
                 }
 
@@ -593,6 +613,7 @@ class ArticleController extends Controller
                 // Sobrescribir el archivo con el nuevo contenido
                 file_put_contents($file, $new_content);
             }
+
 
             // crear el archivo bib con el contenido del campo bib
             File::put(public_path('articles_public/' . $article->id . '/' . 'References.bib'), $article->bib);
@@ -629,23 +650,20 @@ class ArticleController extends Controller
             // sustituir el AQUIVANLASKEYWORDS por el contenido de las keywords
             replace_tex_keywords($new_file_name, $article->keywords);
 
-            // lineas para debuggear
-            $tex_content = file_get_contents($new_file_name);
-
-            // compilar el archivo tex
-            $process = new Process(['/usr/bin/pdflatex', "--shell-escape -halt-on-error -interaction=nonstopmode", "-output-directory=articles_public/{$article->id}", public_path('articles_public/' . $article->id . '/' . $article->id . '.tex')]);
+            // compilar el archivo tex 
+            $process = new Process(['/usr/bin/pdflatex', "-output-directory=templates_public/{$article->id}", public_path('templates_public/' . $article->id . '/' . $article->id . '.tex')]);
             $process->run();
 
             // compilar el archivo bib
-            $process2 = new Process(['/usr/bin/biber', public_path('articles_public/' . $article->id . '/' . $article->id)]);
+            $process2 = new Process(['/usr/bin/biber', public_path('templates_public/' . $article->id . '/' . $article->id)]);
             $process2->run();
 
             // compilar el archivo tex
-            $process3 = new Process(['/usr/bin/pdflatex', "--shell-escape -halt-on-error -interaction=nonstopmode", "-output-directory=articles_public/{$article->id}", public_path('articles_public/' . $article->id . '/' . $article->id . '.tex')]);
+            $process3 = new Process(['/usr/bin/pdflatex', "-output-directory=templates_public/{$article->id}", public_path('templates_public/' . $article->id . '/' . $article->id . '.tex')]);
             $process3->run();
 
             // compilar el archivo tex
-            $process4 = new Process(['/usr/bin/pdflatex', "--shell-escape -halt-on-error -interaction=nonstopmode", "-output-directory=articles_public/{$article->id}", public_path('articles_public/' . $article->id . '/' . $article->id . '.tex')]);
+            $process4 = new Process(['/usr/bin/pdflatex', "-output-directory=templates_public/{$article->id}", public_path('templates_public/' . $article->id . '/' . $article->id . '.tex')]);
             $process4->run();
 
             // verificar si se generó el archivo pdf
@@ -657,7 +675,7 @@ class ArticleController extends Controller
                 return redirect()->route('articles.edit', $article->id)->with('pdf_url', $pdf_url)->with('template_id', $template->id);
             }else{
                 // borrar todo dentro de la carpeta y regresar a la vista con un mensaje de error
-                // File::cleanDirectory(public_path('articles_public/' . $article->id));
+                File::cleanDirectory(public_path('articles_public/' . $article->id));
                 return redirect()->route('articles.edit', $article->id)->with('error', 'No se pudo generar el PDF de este artículo.')->with('template', $template->id);
             }
            
