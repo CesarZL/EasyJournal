@@ -532,8 +532,8 @@ class ArticleController extends Controller
             function replace_tex_content($file, $my_tex_content, $article)
             {
                 $content = file_get_contents($file);
-                // $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\bibliographystyle{plain}' . "\n" . '\bibliography{' . $article->id . '.bib}' . "\n", $content) . "\n";
-                $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\printbibliography' . "\n", $content);
+                $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\bibliographystyle{plain}' . "\n" . '\bibliography{' . $article->id . '.bib}' . "\n", $content) . "\n";
+                // $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\printbibliography' . "\n", $content);
 
                 file_put_contents($file, $content);
             }
@@ -555,7 +555,7 @@ class ArticleController extends Controller
             }
 
             // Buscar los paquetes caption, graphicx, biblatex y la referencia a References.bib, si no existen, agregarlos antes de \begin{document}
-            function add_packages($file, $article)
+            function add_packages($file)
             {
                 // Leer el contenido del archivo
                 $content = file_get_contents($file);
@@ -582,12 +582,12 @@ class ArticleController extends Controller
                     if (strpos($line, '\usepackage{csquotes}') !== false) {
                         $csquotes_package_present = true;
                     }
-                    if (strpos($line, '\usepackage[backend=bibtex]{biblatex}') !== false) {
-                        $biblatex_package_present = true;
-                    }
-                    if (strpos($line, '\addbibresource{References.bib}') !== false) {
-                        $bibresource_present = true;
-                    }
+                    // if (strpos($line, '\usepackage[backend=bibtex]{biblatex}') !== false) {
+                    //     $biblatex_package_present = true;
+                    // }
+                    // if (strpos($line, '\addbibresource{References.bib}') !== false) {
+                    //     $bibresource_present = true;
+                    // }
                 }
 
                 // Si falta alguno de los paquetes o la referencia, encontrar la posición de \begin{document} y agregar los elementos faltantes justo antes
@@ -602,17 +602,17 @@ class ArticleController extends Controller
                             array_splice($lines, $document_index, 0, '\usepackage{graphicx}');
                             $document_index++;
                         }
-                        if (!$biblatex_package_present) {
-                            array_splice($lines, $document_index, 0, '\usepackage[backend=bibtex]{biblatex}');
-                            $document_index++;
-                        }
+                        // if (!$biblatex_package_present) {
+                        //     array_splice($lines, $document_index, 0, '\usepackage[backend=bibtex]{biblatex}');
+                        //     $document_index++;
+                        // }
                         if (!$csquotes_package_present) {
                             array_splice($lines, $document_index, 0, '\usepackage{csquotes}');
-                            $document_index++;
+                            // $document_index++;
                         }
-                        if (!$bibresource_present) {
-                            array_splice($lines, $document_index, 0, '\addbibresource{' . $article->id . '.bib}');
-                        }
+                        // if (!$bibresource_present) {
+                        //     array_splice($lines, $document_index, 0, '\addbibresource{References.bib}');
+                        // }
                     }
                 }
 
@@ -648,7 +648,7 @@ class ArticleController extends Controller
             // mandar el contenido del archivo .tex modificado al modelo de lenguaje gemini pro
             send_to_gemini($new_file_name, $article);
 
-            add_packages($new_file_name, $article);
+            add_packages($new_file_name);
 
             // sustituir el FUNDATION por el contenido de my_tex_content
             replace_tex_content($new_file_name, $my_tex_content, $article);
