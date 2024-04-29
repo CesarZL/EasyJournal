@@ -212,8 +212,8 @@ class ArticleController extends Controller
                     File::delete(public_path("articles_public/{$article->id}/{$article->id}.pdf"));
                 }
 
-                // compilar el archivo tex 
-                $process = new Process(['/usr/bin/pdflatex', "-output-directory=articles_public/{$article->id}", public_path('articles_public/' . $article->id . '/' . $article->id . '.tex')]);
+                // compilar el archivo tex
+                $process = new Process(['/usr/bin/pdflatex', "--shell-escape -halt-on-error -interaction=nonstopmode", "-output-directory=articles_public/{$article->id}", public_path('articles_public/' . $article->id . '/' . $article->id . '.tex')]);
                 $process->run();
 
                 // compilar el archivo bib
@@ -221,11 +221,11 @@ class ArticleController extends Controller
                 $process2->run();
 
                 // compilar el archivo tex
-                $process3 = new Process(['/usr/bin/pdflatex', "-output-directory=articles_public/{$article->id}", public_path('articles_public/' . $article->id . '/' . $article->id . '.tex')]);
+                $process3 = new Process(['/usr/bin/pdflatex', "--shell-escape -halt-on-error -interaction=nonstopmode", "-output-directory=articles_public/{$article->id}", public_path('articles_public/' . $article->id . '/' . $article->id . '.tex')]);
                 $process3->run();
 
                 // compilar el archivo tex
-                $process4 = new Process(['/usr/bin/pdflatex', "-output-directory=articles_public/{$article->id}", public_path('articles_public/' . $article->id . '/' . $article->id . '.tex')]);
+                $process4 = new Process(['/usr/bin/pdflatex', "--shell-escape -halt-on-error -interaction=nonstopmode", "-output-directory=articles_public/{$article->id}", public_path('articles_public/' . $article->id . '/' . $article->id . '.tex')]);
                 $process4->run();
                 
                 // verificar si se generó el archivo pdf
@@ -512,7 +512,7 @@ class ArticleController extends Controller
                         $my_tex_content .= "\\subsubsection{" . $block['data']['text'] . "}\n";
                     }
                 } elseif ($block['type'] == 'paragraph') {
-                    $my_tex_content .= $block['data']['text'] . "\\newline\n";
+                    $my_tex_content .= $block['data']['text'] . " \\newline\n";
                 } elseif ($block['type'] == 'list') {
                     $my_tex_content .= generateListTeX($block['data']['items'], $block['data']['style']);
                 } elseif ($block['type'] == 'image') {
@@ -532,10 +532,8 @@ class ArticleController extends Controller
             function replace_tex_content($file, $my_tex_content)
             {
                 $content = file_get_contents($file);
-                // $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\bibliographystyle{numeric}
-                // \bibliography{References}
-
-                $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\bibliographystyle{numeric}' . "\n" . '\bibliography{References.bib}' . "\n", $content);
+                $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\bibliographystyle{plain}' . "\n" . '\bibliography{References.bib}' . "\n", $content);
+                // $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\printbibliography' . "\n", $content);
 
                 file_put_contents($file, $content);
             }
@@ -562,6 +560,9 @@ class ArticleController extends Controller
                 // Leer el contenido del archivo
                 $content = file_get_contents($file);
 
+                // buscar \usepackage{cite} y borrarlo si existe
+                $content = str_replace('\usepackage{cite}', '', $content);
+
                 // Separar el contenido en líneas
                 $lines = explode("\n", $content);
 
@@ -569,6 +570,7 @@ class ArticleController extends Controller
                 $caption_package_present = false;
                 $graphicx_package_present = false;
                 $biblatex_package_present = false;
+                $csquotes_package_present = false;
                 $bibresource_present = false;
                 foreach ($lines as $line) {
                     if (strpos($line, '\usepackage{caption}') !== false) {
@@ -577,7 +579,10 @@ class ArticleController extends Controller
                     if (strpos($line, '\usepackage{graphicx}') !== false) {
                         $graphicx_package_present = true;
                     }
-                    // if (strpos($line, '\usepackage[backend=biber]{biblatex}') !== false) {
+                    if (strpos($line, '\usepackage{csquotes}') !== false) {
+                        $csquotes_package_present = true;
+                    }
+                    // if (strpos($line, '\usepackage[backend=bibtex]{biblatex}') !== false) {
                     //     $biblatex_package_present = true;
                     // }
                     // if (strpos($line, '\addbibresource{References.bib}') !== false) {
@@ -586,7 +591,7 @@ class ArticleController extends Controller
                 }
 
                 // Si falta alguno de los paquetes o la referencia, encontrar la posición de \begin{document} y agregar los elementos faltantes justo antes
-                if (!$caption_package_present || !$graphicx_package_present || !$biblatex_package_present || !$bibresource_present) {
+                if (!$caption_package_present || !$graphicx_package_present || !$biblatex_package_present || !$csquotes_package_present || !$bibresource_present) {
                     $document_index = array_search('\begin{document}', $lines);
                     if ($document_index !== false) {
                         if (!$caption_package_present) {
@@ -598,9 +603,13 @@ class ArticleController extends Controller
                             $document_index++;
                         }
                         // if (!$biblatex_package_present) {
-                        //     array_splice($lines, $document_index, 0, '\usepackage[backend=biber]{biblatex}');
+                        //     array_splice($lines, $document_index, 0, '\usepackage[backend=bibtex]{biblatex}');
                         //     $document_index++;
                         // }
+                        if (!$csquotes_package_present) {
+                            array_splice($lines, $document_index, 0, '\usepackage{csquotes}');
+                            // $document_index++;
+                        }
                         // if (!$bibresource_present) {
                         //     array_splice($lines, $document_index, 0, '\addbibresource{References.bib}');
                         // }
@@ -650,20 +659,20 @@ class ArticleController extends Controller
             // sustituir el AQUIVANLASKEYWORDS por el contenido de las keywords
             replace_tex_keywords($new_file_name, $article->keywords);
 
-            // compilar el archivo tex 
-            $process = new Process(['/usr/bin/pdflatex', "-output-directory=templates_public/{$article->id}", public_path('templates_public/' . $article->id . '/' . $article->id . '.tex')]);
+            // compilar el archivo tex
+            $process = new Process(['/usr/bin/pdflatex', "-f --shell-escape -halt-on-error -interaction=nonstopmode", "-output-directory=articles_public/{$article->id}", public_path('articles_public/' . $article->id . '/' . $article->id . '.tex')]);
             $process->run();
 
             // compilar el archivo bib
-            $process2 = new Process(['/usr/bin/biber', public_path('templates_public/' . $article->id . '/' . $article->id)]);
+            $process2 = new Process(['/usr/bin/bibtex', "-f", public_path('articles_public/' . $article->id . '/' . $article->id)]);
             $process2->run();
 
             // compilar el archivo tex
-            $process3 = new Process(['/usr/bin/pdflatex', "-output-directory=templates_public/{$article->id}", public_path('templates_public/' . $article->id . '/' . $article->id . '.tex')]);
+            $process3 = new Process(['/usr/bin/pdflatex', "-f --shell-escape -halt-on-error -interaction=nonstopmode", "-output-directory=articles_public/{$article->id}", public_path('articles_public/' . $article->id . '/' . $article->id . '.tex')]);
             $process3->run();
 
             // compilar el archivo tex
-            $process4 = new Process(['/usr/bin/pdflatex', "-output-directory=templates_public/{$article->id}", public_path('templates_public/' . $article->id . '/' . $article->id . '.tex')]);
+            $process4 = new Process(['/usr/bin/pdflatex', "-f --shell-escape -halt-on-error -interaction=nonstopmode", "-output-directory=articles_public/{$article->id}", public_path('articles_public/' . $article->id . '/' . $article->id . '.tex')]);
             $process4->run();
 
             // verificar si se generó el archivo pdf
@@ -675,7 +684,7 @@ class ArticleController extends Controller
                 return redirect()->route('articles.edit', $article->id)->with('pdf_url', $pdf_url)->with('template_id', $template->id);
             }else{
                 // borrar todo dentro de la carpeta y regresar a la vista con un mensaje de error
-                File::cleanDirectory(public_path('articles_public/' . $article->id));
+                // File::cleanDirectory(public_path('articles_public/' . $article->id));
                 return redirect()->route('articles.edit', $article->id)->with('error', 'No se pudo generar el PDF de este artículo.')->with('template', $template->id);
             }
            
