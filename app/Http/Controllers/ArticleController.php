@@ -532,8 +532,8 @@ class ArticleController extends Controller
             function replace_tex_content($file, $my_tex_content)
             {
                 $content = file_get_contents($file);
-                // $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\bibliographystyle{plain}' . "\n" . '\bibliography{References.bib}' . "\n", $content);
-                $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\printbibliography' . "\n", $content);
+                $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\bibliographystyle{plain}' . "\n" . '\bibliography{References.bib}' . "\n", $content);
+                // $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\printbibliography' . "\n", $content);
 
                 file_put_contents($file, $content);
             }
@@ -582,12 +582,12 @@ class ArticleController extends Controller
                     if (strpos($line, '\usepackage{csquotes}') !== false) {
                         $csquotes_package_present = true;
                     }
-                    if (strpos($line, '\usepackage[backend=bibtex]{biblatex}') !== false) {
-                        $biblatex_package_present = true;
-                    }
-                    if (strpos($line, '\addbibresource{References.bib}') !== false) {
-                        $bibresource_present = true;
-                    }
+                    // if (strpos($line, '\usepackage[backend=bibtex]{biblatex}') !== false) {
+                    //     $biblatex_package_present = true;
+                    // }
+                    // if (strpos($line, '\addbibresource{References.bib}') !== false) {
+                    //     $bibresource_present = true;
+                    // }
                 }
 
                 // Si falta alguno de los paquetes o la referencia, encontrar la posición de \begin{document} y agregar los elementos faltantes justo antes
@@ -602,17 +602,17 @@ class ArticleController extends Controller
                             array_splice($lines, $document_index, 0, '\usepackage{graphicx}');
                             $document_index++;
                         }
-                        if (!$biblatex_package_present) {
-                            array_splice($lines, $document_index, 0, '\usepackage[backend=bibtex]{biblatex}');
-                            $document_index++;
-                        }
+                        // if (!$biblatex_package_present) {
+                        //     array_splice($lines, $document_index, 0, '\usepackage[backend=bibtex]{biblatex}');
+                        //     $document_index++;
+                        // }
                         if (!$csquotes_package_present) {
                             array_splice($lines, $document_index, 0, '\usepackage{csquotes}');
-                            $document_index++;
+                            // $document_index++;
                         }
-                        if (!$bibresource_present) {
-                            array_splice($lines, $document_index, 0, '\addbibresource{References.bib}');
-                        }
+                        // if (!$bibresource_present) {
+                        //     array_splice($lines, $document_index, 0, '\addbibresource{References.bib}');
+                        // }
                     }
                 }
 
@@ -626,6 +626,9 @@ class ArticleController extends Controller
 
             // crear el archivo bib con el contenido del campo bib
             File::put(public_path('articles_public/' . $article->id . '/' . 'References.bib'), $article->bib);
+
+            $process5 = new Process(['/usr/bin/bibtex', "-f", public_path('articles_public/' . $article->id . '/' . $article->id)]);
+            $process5->run();
 
             // quitar los comentarios del archivo .tex
             remove_tex_comments($new_file_name); 
