@@ -1,0 +1,41 @@
+\documentclass[12pt]{difu100cia} 
+\title{A Computational Tool to Generate Latex-based Manuscripts for Multiple Journal Templates} 
+\subtitle{Plantilla para el envío de artículos a la revista $\boldsymbol{\mathcal{DIFU}_{100}ci@}$} 
+\author[1]{\authorstyle{Cesar Zavala Lopez}\thanks{Autor de correspondencia}}
+\affil[1]{\institution{Departamento de ITI} 
+\authorcr Universidad Politécnica de Victoria
+\authorcr Av. Nuevas Tecnologías 5902, Parque Científico y Tecnológico de Tamaulipas, 87138 Cdad. Victoria, Tamps.
+\authorcr \href{mailto:cesarzavalamx15@gmail.com}{cesarzavalamx15@gmail.com}, 
+\href{https://orcid.org/2342-3423-4234-2342}{orcid.org/2342-3423-4234-2342}
+}
+\publishrange{xxxx - xxxx xxxx}
+\volume{XX}
+\num{X}
+\published{XX de xxxx de xxxx}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{csquotes}
+\begin{document}
+\thispagestyle{firstpage} 
+\pagestyle{fancy}
+\twocolumn[\begin{@twocolumnfalse}
+\maketitle 
+\selectlanguage{english} 
+\begin{abstract}En este trabajo se propone una solución al problema de reconocimiento de microalgas apartir de las imagenes proporcionadas, en la cual se le integró una interfaz grafica para mayor comodidad del usuario. Se creo un dataset para poder hacer uso de un clasificador y así entrenar a un modelo. Para lograrlo, se realizó una investigación sobre las distintas disitintas disciplinas, y se implementó en un programa con el lenguaje de programación Python.  El programa utiliza diversas librerías que llevan a la solución del problema como OpenCv y sklearn.\end{abstract}
+\keywords{aqui, debe, ir, el, resumen, palabras, clave}
+\selectlanguage{spanish} 
+\begin{abstract}
+El resumen debe ser un párrafo de un máximo de 8 renglones, en ella se explicará de forma clara y condensada el trabajo realizado en el artículo.
+\end{abstract}
+\keywords{Palabra clave 1, Palabra clave 2, Palabra clave 3}
+\vspace{3em}
+\end{@twocolumnfalse}]
+\saythanks
+\section{asdasdas}
+asdasdasdasd \newline
+
+
+\bibliographystyle{plain}
+\bibliography{1.bib}
+
+\end{document}

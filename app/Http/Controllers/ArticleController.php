@@ -159,7 +159,7 @@ class ArticleController extends Controller
                 $tex_content .= "\\usepackage{graphicx}\n";
                 $tex_content .= "\\usepackage{subfig}\n";
                 $tex_content .= "\\usepackage[backend=biber]{biblatex}\n";
-                $tex_content .= "\\addbibresource{" . $article->id . ".bib}\n";
+                $tex_content .= "\\addbibresource{References.bib}\n";
                 $tex_content .= "\\date{}\n";
                 $tex_content .= "\\setcounter{Maxaffil}{0}\n";
                 $tex_content .= "\\renewcommand\\Affilfont{\\itshape\\small}\n";
@@ -205,7 +205,7 @@ class ArticleController extends Controller
                 File::put(public_path('articles_public/' . $article->id . '/' . $article->id . '.tex'), $tex_content);
 
                 // crear el archivo bib con el contenido del campo bib 
-                File::put(public_path('articles_public/' . $article->id . '/' . $article->id . '.bib'), $article->bib);
+                File::put(public_path('articles_public/' . $article->id . '/' . 'References.bib'), $article->bib);
 
                 // borrar el archivo pdf si existe en la carpeta del artículo
                 if (file_exists(public_path("articles_public/{$article->id}/{$article->id}.pdf"))) {
@@ -529,11 +529,11 @@ class ArticleController extends Controller
             $my_tex_content = str_replace("&nbsp;", " ", $my_tex_content);
 
             // borra el \section{FUNDATION} reemplaza directamente por my_tex_content
-            function replace_tex_content($file, $my_tex_content, $article)
+            function replace_tex_content($file, $my_tex_content)
             {
                 $content = file_get_contents($file);
-                $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\bibliographystyle{plain}' . "\n" . '\bibliography{' . $article->id . '.bib}' . "\n", $content) . "\n";
-                // $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\printbibliography' . "\n", $content);
+                // $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\bibliographystyle{plain}' . "\n" . '\bibliography{References.bib}' . "\n", $content);
+                $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\printbibliography' . "\n", $content);
 
                 file_put_contents($file, $content);
             }
@@ -582,12 +582,12 @@ class ArticleController extends Controller
                     if (strpos($line, '\usepackage{csquotes}') !== false) {
                         $csquotes_package_present = true;
                     }
-                    // if (strpos($line, '\usepackage[backend=bibtex]{biblatex}') !== false) {
-                    //     $biblatex_package_present = true;
-                    // }
-                    // if (strpos($line, '\addbibresource{References.bib}') !== false) {
-                    //     $bibresource_present = true;
-                    // }
+                    if (strpos($line, '\usepackage[backend=bibtex]{biblatex}') !== false) {
+                        $biblatex_package_present = true;
+                    }
+                    if (strpos($line, '\addbibresource{References.bib}') !== false) {
+                        $bibresource_present = true;
+                    }
                 }
 
                 // Si falta alguno de los paquetes o la referencia, encontrar la posición de \begin{document} y agregar los elementos faltantes justo antes
@@ -602,17 +602,17 @@ class ArticleController extends Controller
                             array_splice($lines, $document_index, 0, '\usepackage{graphicx}');
                             $document_index++;
                         }
-                        // if (!$biblatex_package_present) {
-                        //     array_splice($lines, $document_index, 0, '\usepackage[backend=bibtex]{biblatex}');
-                        //     $document_index++;
-                        // }
+                        if (!$biblatex_package_present) {
+                            array_splice($lines, $document_index, 0, '\usepackage[backend=bibtex]{biblatex}');
+                            $document_index++;
+                        }
                         if (!$csquotes_package_present) {
                             array_splice($lines, $document_index, 0, '\usepackage{csquotes}');
-                            // $document_index++;
+                            $document_index++;
                         }
-                        // if (!$bibresource_present) {
-                        //     array_splice($lines, $document_index, 0, '\addbibresource{References.bib}');
-                        // }
+                        if (!$bibresource_present) {
+                            array_splice($lines, $document_index, 0, '\addbibresource{References.bib}');
+                        }
                     }
                 }
 
@@ -625,7 +625,7 @@ class ArticleController extends Controller
 
 
             // crear el archivo bib con el contenido del campo bib
-            File::put(public_path('articles_public/' . $article->id . '/' . $article->id . '.bib'), $article->bib);
+            File::put(public_path('articles_public/' . $article->id . '/' . 'References.bib'), $article->bib);
 
             // quitar los comentarios del archivo .tex
             remove_tex_comments($new_file_name); 
@@ -651,7 +651,7 @@ class ArticleController extends Controller
             add_packages($new_file_name);
 
             // sustituir el FUNDATION por el contenido de my_tex_content
-            replace_tex_content($new_file_name, $my_tex_content, $article);
+            replace_tex_content($new_file_name, $my_tex_content);
 
             // sustituir el AQUIVAELABSTRACT por el contenido del abstract
             replace_tex_abstract($new_file_name, $article->abstract);
@@ -664,7 +664,7 @@ class ArticleController extends Controller
             $process->run();
 
             // compilar el archivo bib
-            $process2 = new Process(['/usr/bin/biber', public_path('articles_public/' . $article->id . '/' . $article->id)]);
+            $process2 = new Process(['/usr/bin/bibtex', "-f", public_path('articles_public/' . $article->id . '/' . $article->id)]);
             $process2->run();
 
             // compilar el archivo tex
