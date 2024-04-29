@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('orcid')->unique()->nullable();
             $table->text('biography')->nullable();
             $table->string('institution');
+            $table->string('institution_address');
             $table->string('affiliation')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

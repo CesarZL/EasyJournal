@@ -40,6 +40,7 @@ class CoauthorController extends Controller
             'phone' => 'required',
             'address' => 'required',
             'institution' => 'required',
+            'institution_address' => 'required',
             'country' => 'required',
             'orcid' => 'required',
         ]);
@@ -53,14 +54,15 @@ class CoauthorController extends Controller
         $coauthor->phone = $request->phone;
         $coauthor->address = $request->address;
         $coauthor->institution = $request->institution;
+        $coauthor->institution_address = $request->institution_address;
         $coauthor->country = $request->country;
         $coauthor->orcid = $request->orcid;
-        $coauthor->scopus_id = $request->scopus_id;
-        $coauthor->researcher_id = $request->researcher_id;
-        $coauthor->url = $request->url;
+        // $coauthor->scopus_id = $request->scopus_id;
+        // $coauthor->researcher_id = $request->researcher_id;
+        // $coauthor->url = $request->url;
         $coauthor->affiliation = $request->affiliation;
         $coauthor->affiliation_url = $request->affiliation_url;
-        $coauthor->biography = $request->biography;
+        // $coauthor->biography = $request->biography;
         $coauthor->created_by = auth()->user()->id;
 
         $coauthor->save();
@@ -89,6 +91,7 @@ class CoauthorController extends Controller
             'phone' => ['required', 'string', 'max:10'],
             'address' => 'required',
             'institution' => 'required',
+            'institution_address' => 'required',
             'country' => 'required',
             'orcid' => ['nullable', 'string', 'unique:users', 'max:20', 'min:16', 'regex:/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}/'],
         ]);
@@ -101,15 +104,16 @@ class CoauthorController extends Controller
             'phone' => $request->phone,
             'address' => $request->address,
             'institution' => $request->institution,
+            'institution_address' => $request->institution_address,
             'country' => $request->country,
             'orcid' => $request->orcid,
-            'scopus_id' => $request->scopus_id,
-            'researcher_id' => $request->researcher_id,
-            'author_id' => $request->author_id,
-            'url' => $request->url,
+            // 'scopus_id' => $request->scopus_id,
+            // 'researcher_id' => $request->researcher_id,
+            // 'author_id' => $request->author_id,
+            // 'url' => $request->url,
             'affiliation' => $request->affiliation,
             'affiliation_url' => $request->affiliation_url,
-            'biography' => $request->biography,
+            // 'biography' => $request->biography,
         ]);
 
         return redirect()->route('coauthors')->with('success', 'Coauthor actualizado correctamente');

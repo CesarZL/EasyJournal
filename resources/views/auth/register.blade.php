@@ -61,11 +61,16 @@
                         </div>
 
                         <div>
+                            <x-label-required for="institution_address" value="{{ __('Dirección') }}" />
+                            <x-input id="institution_address" class="block mt-1 w-full" type="text" name="institution_address" :value="old('institution_address')" required autocomplete="institution_address" />
+                        </div>
+
+                        <div>
                             <x-label-required for="affiliation" value="{{ __('Afiliación') }}" />
                             <x-input id="affiliation" class="block mt-1 w-full" type="text" name="affiliation" :value="old('affiliation')" required autocomplete="affiliation" />
                         </div>
                 
-                        <div>
+                        <div class="md:col-span-3">
                             <x-label-required for="email" value="{{ __('Email') }}" />
                             <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
                         </div>

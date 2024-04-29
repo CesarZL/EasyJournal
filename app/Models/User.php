@@ -36,6 +36,7 @@ class User extends Authenticatable
         'password',
         'orcid',
         'institution',
+        'institution_address',
         'affiliation',
     ];
 

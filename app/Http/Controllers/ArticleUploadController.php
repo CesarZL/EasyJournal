@@ -97,11 +97,6 @@ class ArticleUploadController extends Controller
                 unlink($pdfFile);
             }
         }
-
-        // // cambiar el nombre al archivo tex más grande para que no tenga espacios por main.tex
-        // $newHeaviestFile = $extractPath . '/main.tex';
-        // rename($heaviestFile, $newHeaviestFile);
-        // $heaviestFile = $newHeaviestFile;
         
         // Función recursiva para obtener todos los archivos dentro de un directorio y sus subdirectorios, devolviendo nombres relativos y moviendo archivos a la carpeta raíz con nombres modificados
         function getFilesRecursively($directory, $basePath = null, $templateRootPath = null, $excludeFile = null) {
@@ -185,9 +180,6 @@ class ArticleUploadController extends Controller
             $renamedFile = explode('.', $renamedFile)[0];
             $results['renamedFiles'][$i] = $renamedFile;
         }
-
-        // dd(originalNames, renamedFiles);
-        // dd($results);
 
         // leer contenido del archivo tex más grande
         $content = file_get_contents($heaviestFile);
@@ -324,6 +316,21 @@ class ArticleUploadController extends Controller
             $template->user_id = auth()->user()->id;
             $template->save();
 
+            // borrar el zip y volver a crearlo con los archivos modificados sin el compile.sh
+            $zip = new ZipArchive;
+            $newZipPath = storage_path('app/' . $zipPath);
+            $zip->open($newZipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+            $files = scandir($extractPath);
+            foreach ($files as $file) {
+                if ($file !== 'compile.sh') {
+                    $filePath = $extractPath . '/' . $file;
+                    $relativePath = substr($filePath, strlen($extractPath) + 1);
+                    if (is_file($filePath)) { // Exclude directories
+                        $zip->addFile($filePath, $relativePath);
+                    }
+                }
+            }
+            $zip->close();
             return redirect()->route('templates')->with('success', 'Plantilla subida correctamente.');
         } else {
             // Si el archivo PDF no se generó, mostrar un mensaje de error y se borra el archivo ZIP y la carpeta extraída
@@ -380,7 +387,6 @@ class ArticleUploadController extends Controller
         }
 
         // Mover el archivo PDF al directorio publico a la carpeta pdfs
-        // File::move($pdfPath, public_path('pdfs/' . $pdfFileName));
         File::copy($pdfPath, public_path('pdfs/' . $pdfFileName));
 
         $pdfUrl = asset('pdfs/' . $pdfFileName);

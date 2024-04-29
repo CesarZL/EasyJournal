@@ -59,6 +59,15 @@
                         </div>
 
                         <div class="mt-4">
+                            <x-label-required for="institution_address" :value="__('Dirección de la institución')" />
+                            <x-input id="institution_address" name="institution_address" type="text" value="{{ old('institution_address') }}" />
+                            @error('institution_address')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+
+                        <div class="mt-4">
                             <x-label for="affiliation_url" :value="__('URL de la institution')" />
                             <x-input id="affiliation_url" name="affiliation_url" type="text" value="{{ old('affiliation_url') }}" />
                             @error('affiliation_url')

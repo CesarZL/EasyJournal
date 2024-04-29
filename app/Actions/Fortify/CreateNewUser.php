@@ -28,6 +28,7 @@ class CreateNewUser implements CreatesNewUsers
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'orcid' => ['nullable', 'string', 'unique:users', 'max:20', 'min:16', 'regex:/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}/'],
             'institution' => ['required', 'string', 'max:255'],
+            'institution_address' => ['required', 'string', 'max:255'],
             'affiliation' => ['nullable', 'string', 'max:255'],
             'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
@@ -42,6 +43,7 @@ class CreateNewUser implements CreatesNewUsers
             'email' => $input['email'],
             'orcid' => $input['orcid'],
             'institution' => $input['institution'],
+            'institution_address' => $input['institution_address'],
             'affiliation' => $input['affiliation'],
             'password' => Hash::make($input['password']),
         ]);

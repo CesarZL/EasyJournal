@@ -113,6 +113,13 @@
             <x-input-error for="institution" class="mt-2" />
         </div>
 
+        <!-- Institution Address -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-label for="institution_address" value="{{ __('Dirección de la institución') }}" />
+            <x-input id="institution_address" type="text" class="mt-1 block w-full" wire:model="state.institution_address" required autocomplete="institution_address" />
+            <x-input-error for="institution_address" class="mt-2" />
+        </div>
+
         <!-- Affiliation -->
         <div class="col-span-6 sm:col-span-4">
             <x-label for="affiliation" value="{{ __('Afiliación') }}" />

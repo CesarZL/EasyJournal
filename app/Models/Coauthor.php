@@ -17,6 +17,7 @@ class Coauthor extends Model
         'phone',
         'address',
         'institution',
+        'institution_address',
         'country',
         'orcid',
         // 'scopus_id',

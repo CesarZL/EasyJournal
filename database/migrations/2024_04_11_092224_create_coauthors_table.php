@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('country');
             $table->string('address');
             $table->string('institution');
+            $table->string('institution_address');
             $table->string('affiliation')->nullable();
             $table->string('orcid')->unique();
             // $table->text('biography')->nullable();
