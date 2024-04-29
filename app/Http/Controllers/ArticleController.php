@@ -532,8 +532,9 @@ class ArticleController extends Controller
             function replace_tex_content($file, $my_tex_content)
             {
                 $content = file_get_contents($file);
-                $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\bibliographystyle{plain}' . "\n" . '\bibliography{References.bib}' . "\n", $content);
+                // $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\bibliographystyle{plain}' . "\n" . '\bibliography{References.bib}' . "\n", $content);
                 // $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n\n" . '\printbibliography' . "\n", $content);
+                $content = str_replace('\section{FUNDATION}', $my_tex_content . "\n", $content);
 
                 file_put_contents($file, $content);
             }
