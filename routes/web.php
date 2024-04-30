@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\ArticleUploadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,11 +70,5 @@ Route::middleware([
 
     //Ruta para mostrar una preview de la plantilla
     Route::get('/templates/{template}/preview', [App\Http\Controllers\ArticleUploadController::class, 'showPreview'])->name('templates.show-preview');
-
-
-
-        
-
-    
 
 });

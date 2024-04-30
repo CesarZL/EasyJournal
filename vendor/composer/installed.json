@@ -1688,6 +1688,74 @@
             "install-path": "../hamcrest/hamcrest-php"
         },
         {
+            "name": "ismaelw/laratex",
+            "version": "v1.2.3",
+            "version_normalized": "1.2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ismaelw/laratex.git",
+                "reference": "1cfa55b45ebd5bb4f4cb49194396786bdbbfa2c1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ismaelw/laratex/zipball/1cfa55b45ebd5bb4f4cb49194396786bdbbfa2c1",
+                "reference": "1cfa55b45ebd5bb4f4cb49194396786bdbbfa2c1",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/filesystem": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
+                "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
+                "php": "^7.4|^8.0",
+                "symfony/process": "^3.0|^4.0|^5.0|^6.0|^7.0"
+            },
+            "time": "2024-03-20T15:46:57+00:00",
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Ismaelw\\LaraTeX\\LaraTeXServiceProvider"
+                    ],
+                    "aliases": {
+                        "LaraTeX": "Ismaelw\\LaraTeX\\LaraTeXFacade"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Ismaelw\\LaraTeX\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ismael Wismann",
+                    "email": "wismann.ismael@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A package for creating PDFs in Laravel using LaTeX",
+            "homepage": "https://github.com/ismaelw/laratex",
+            "keywords": [
+                "ismaelw",
+                "laratex"
+            ],
+            "support": {
+                "issues": "https://github.com/ismaelw/laratex/issues",
+                "source": "https://github.com/ismaelw/laratex/tree/v1.2.3"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/ismaelw",
+                    "type": "github"
+                }
+            ],
+            "install-path": "../ismaelw/laratex"
+        },
+        {
             "name": "laravel/fortify",
             "version": "v1.20.1",
             "version_normalized": "1.20.1.0",

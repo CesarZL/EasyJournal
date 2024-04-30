@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'b514a0e0cd3246f79879a6692dfac1443bca892a',
+        'reference' => 'b0c8a53ff061febdde7c1f65294d8bc940880d11',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -427,6 +427,15 @@
                 0 => 'v10.47.0',
             ),
         ),
+        'ismaelw/laratex' => array(
+            'pretty_version' => 'v1.2.3',
+            'version' => '1.2.3.0',
+            'reference' => '1cfa55b45ebd5bb4f4cb49194396786bdbbfa2c1',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../ismaelw/laratex',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'kodova/hamcrest-php' => array(
             'dev_requirement' => true,
             'replaced' => array(
@@ -463,7 +472,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'b514a0e0cd3246f79879a6692dfac1443bca892a',
+            'reference' => 'b0c8a53ff061febdde7c1f65294d8bc940880d11',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

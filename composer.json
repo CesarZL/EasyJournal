@@ -9,6 +9,7 @@
         "alaminfirdows/laravel-editorjs": "^2.1",
         "google-gemini-php/laravel": "^1.0",
         "guzzlehttp/guzzle": "^7.2",
+        "ismaelw/laratex": "^1.2",
         "laravel/framework": "^10.10",
         "laravel/jetstream": "^4.3",
         "laravel/sanctum": "^3.3",

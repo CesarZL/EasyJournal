@@ -143,6 +143,7 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         ),
         'I' => 
         array (
+            'Ismaelw\\LaraTeX\\' => 16,
             'Illuminate\\Support\\' => 19,
             'Illuminate\\' => 11,
         ),
@@ -477,6 +478,10 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'Laravel\\Fortify\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel/fortify/src',
+        ),
+        'Ismaelw\\LaraTeX\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ismaelw/laratex/src',
         ),
         'Illuminate\\Support\\' => 
         array (
@@ -3289,6 +3294,18 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'Illuminate\\View\\ViewFinderInterface' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/View/ViewFinderInterface.php',
         'Illuminate\\View\\ViewName' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/View/ViewName.php',
         'Illuminate\\View\\ViewServiceProvider' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/View/ViewServiceProvider.php',
+        'Ismaelw\\LaraTeX\\LaraTeX' => __DIR__ . '/..' . '/ismaelw/laratex/src/LaraTeX.php',
+        'Ismaelw\\LaraTeX\\LaraTeXFacade' => __DIR__ . '/..' . '/ismaelw/laratex/src/LaraTeXFacade.php',
+        'Ismaelw\\LaraTeX\\LaraTeXServiceProvider' => __DIR__ . '/..' . '/ismaelw/laratex/src/LaraTeXServiceProvider.php',
+        'Ismaelw\\LaraTeX\\LaratexCollection' => __DIR__ . '/..' . '/ismaelw/laratex/src/LaratexCollection.php',
+        'Ismaelw\\LaraTeX\\LaratexEmptyCollectionException' => __DIR__ . '/..' . '/ismaelw/laratex/src/LaratexEmptyCollectionException.php',
+        'Ismaelw\\LaraTeX\\LaratexException' => __DIR__ . '/..' . '/ismaelw/laratex/src/LaratexException.php',
+        'Ismaelw\\LaraTeX\\LaratexPdfFailed' => __DIR__ . '/..' . '/ismaelw/laratex/src/LaratexPdfFailed.php',
+        'Ismaelw\\LaraTeX\\LaratexPdfWasGenerated' => __DIR__ . '/..' . '/ismaelw/laratex/src/LaratexPdfWasGenerated.php',
+        'Ismaelw\\LaraTeX\\LaratexZipFailedException' => __DIR__ . '/..' . '/ismaelw/laratex/src/LaratexZipFailedException.php',
+        'Ismaelw\\LaraTeX\\LatexEscaper' => __DIR__ . '/..' . '/ismaelw/laratex/src/LatexEscaper.php',
+        'Ismaelw\\LaraTeX\\RawTex' => __DIR__ . '/..' . '/ismaelw/laratex/src/RawTex.php',
+        'Ismaelw\\LaraTeX\\ViewNotFoundException' => __DIR__ . '/..' . '/ismaelw/laratex/src/ViewNotFoundException.php',
         'Laravel\\Fortify\\Actions\\AttemptToAuthenticate' => __DIR__ . '/..' . '/laravel/fortify/src/Actions/AttemptToAuthenticate.php',
         'Laravel\\Fortify\\Actions\\CanonicalizeUsername' => __DIR__ . '/..' . '/laravel/fortify/src/Actions/CanonicalizeUsername.php',
         'Laravel\\Fortify\\Actions\\CompletePasswordReset' => __DIR__ . '/..' . '/laravel/fortify/src/Actions/CompletePasswordReset.php',
