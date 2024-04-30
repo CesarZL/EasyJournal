@@ -887,46 +887,39 @@ class ArticleController extends Controller
                 {
                     // Ruta al archivo .aux generado
                     $aux_file = public_path('articles_public/' . $article->id . '/' . $article->id . '.aux');
-                    $antes = file_get_contents ($aux_file);
+                    
                     // Leer el contenido del archivo .aux
                     $aux_content = file_get_contents($aux_file);
                     
                     // Reemplazar \bibdata{References.bib} por la ruta completa absoluta de References.bib
                     $aux_content = str_replace('References.bib', public_path('articles_public/' . $article->id . '/' . 'References.bib'), $aux_content);
                     
+                    // Lista de estilos permitidos que no deben tener el path absoluto
+                    $allowed_styles = array('abbrv', 'acm', 'alpha', 'apalikem', 'ieeetr', 'plain', 'siam', 'unsrt');
+                    
                     // Buscar todas las ocurrencias de \bibstyle{}
                     preg_match_all('/\\\\bibstyle{([^}]*)}/', $aux_content, $matches);
                     
                     // Verificar si se encontró al menos una ocurrencia de \bibstyle{}
                     if (!empty($matches[1])) {
-                        $found_plain = false; // Bandera para indicar si se encontró \bibstyle{plain}
-                        $selected_style = ''; // Almacenará el estilo seleccionado
-                        
                         foreach ($matches[1] as $style) {
-                            // Si se encuentra plain, no lo seleccionamos
-                            if ($style !== 'plain') {
-                                $selected_style = $style;
-                                break;
+                            // Si el estilo está en la lista permitida, no se cambia el path
+                            if (in_array($style, $allowed_styles)) {
+                                continue;
                             } else {
-                                $found_plain = true;
+                                // Si no está en la lista permitida, se ajusta el path
+                                $aux_content = str_replace('\bibstyle{' . $style . '}', '\bibstyle{' . public_path('articles_public/' . $article->id . '/') . $style . '}', $aux_content);
                             }
                         }
-                        
-                        // Si no se encontró otro estilo que no sea plain, dejamos \bibstyle{plain} intacto
-                        if (!$selected_style && $found_plain) {
-                            $selected_style = 'plain';
-                        }
-                        
-                        // Cambiar el path del estilo seleccionado
-                        $aux_content = str_replace('\bibstyle{' . $selected_style . '}', '\bibstyle{' . public_path('articles_public/' . $article->id . '/') . $selected_style . '}', $aux_content);
                     }
                     
                     // Guardar el contenido modificado en el archivo .aux 
                     file_put_contents($aux_file, $aux_content);
                     
                     // Debug: Mostrar el contenido antes y después de los cambios
-                    // dd($antes, $aux_content);
+                    // dd($aux_content);
                 }
+                
 
 
                 fix_aux($article);
